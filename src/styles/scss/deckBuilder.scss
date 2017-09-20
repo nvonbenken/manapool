@@ -1,0 +1,24 @@
+.deck-card-list {
+  flex: 1;
+  padding: 10px !important;
+  overflow: auto;
+}
+
+.deck-details {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.deck-list-item {
+  display: inline-flex;
+  width: calc(100% - 30px);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deck-list-item-name {
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

@@ -1,0 +1,12 @@
+@import "colors";
+
+.card-list {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: $white;
+  padding: 10px;
+  min-height: calc(100vh - 150px);
+  align-items: flex-start;
+}
