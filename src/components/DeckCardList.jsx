@@ -22,8 +22,10 @@ const DeckCardList = (props) => {
       return {
         key: item.id,
         title: (
-          <div className="deck-list-item">
-            <div className="deck-list-item-name">{item.name}</div>
+          <div className="deck-list-item flicker-fix">
+            <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
+              {item.name}
+            </div>
             <div style={{ width: '150px' }}>{item.type}</div>
             <div style={{ width: '100px' }}>{item.colors ? item.colors.join('/') : ''}</div>
             <div style={{ width: '50px' }}>{item.cmc}</div>
@@ -45,8 +47,10 @@ const DeckCardList = (props) => {
     return {
       key: item.id,
       title: (
-        <div className="deck-list-item">
-          <div className="deck-list-item-name">{item.name}</div>
+        <div className="deck-list-item flicker-fix">
+          <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
+            {item.name}
+          </div>
           <div style={{ width: '150px' }}>{item.type}</div>
           <div style={{ width: '100px' }}>{item.colors ? item.colors.join('/') : ''}</div>
           <div style={{ width: '50px' }}>{item.cmc}</div>

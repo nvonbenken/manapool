@@ -60,7 +60,7 @@ class CardLookup extends Component {
 
     this.setState({ deck: d });
   }
-  
+
   searchResults(cards) {
     if (!cards) {
       this.setState({ cards: [] });
@@ -74,7 +74,7 @@ class CardLookup extends Component {
       <div style={{ display: 'flex', flex: 1, height: 'calc(100vh - 85px)' }}>
         <SidebarOverlay onSearchComplete={this.searchResults.bind(this)} />
         <div style={{ display: 'flex', width: '100%' }}>
-          <div style={{ display: 'flex', width: '65%', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', width: '75%', flexDirection: 'column' }}>
             <DeckCardList
               style={{ flexGrow: 1, overflow: 'auto' }}
               onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
