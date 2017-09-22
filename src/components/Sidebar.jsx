@@ -26,16 +26,14 @@ class SidebarOverlay extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', _.throttle(this.handleScroll, 300));
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', _.throttle(this.handleScroll, 300));
   }
 
   handleScroll() {
-    const windowHeight =
-      'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
     const body = document.body;
     const html = document.documentElement;
     const docHeight = Math.max(
@@ -45,8 +43,10 @@ class SidebarOverlay extends Component {
       html.scrollHeight,
       html.offsetHeight,
     );
-    const windowBottom = windowHeight + window.pageYOffset;
-    if (windowBottom >= docHeight) {
+
+    const pixelsFromWindowBottomToBottom = 0 + docHeight - window.scrollY - window.innerHeight;
+
+    if (pixelsFromWindowBottomToBottom < 200) {
       this.setState({ page: this.state.page + 1 });
       this.setState({
         cards: this.state.cards + this.cardSearch(this.state.t, this.state.f, this.state.page),
@@ -94,7 +94,7 @@ class SidebarOverlay extends Component {
     const cardSearch = _.debounce((term) => {
       this.resetSearch();
       this.cardSearch(term, null, 1);
-    }, 300);
+    }, 200);
 
     const applyFilter = _.debounce((filters) => {
       this.resetSearch();

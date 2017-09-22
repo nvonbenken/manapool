@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { Input, Accordion, Icon } from 'semantic-ui-react';
 
 import '../styles/filters.css';
@@ -15,6 +16,8 @@ class Filters extends Component {
     this.state = {
       filters: [],
     };
+
+    this.updateFilters = this.updateFilters.bind(this);
   }
 
   getColors() {
@@ -83,7 +86,9 @@ class Filters extends Component {
     //   { value: 'basic land', label: 'Basic Land' },
     // ];
 
-    const updateFilters = this.updateFilters;
+    const updateFilters = _.debounce(() => {
+      this.updateFilters();
+    }, 200);
 
     return (
       <div>
@@ -93,6 +98,7 @@ class Filters extends Component {
             <Input
               id="costInput"
               icon="search"
+              type="number"
               placeholder="CMC"
               style={{ marginBottom: '10px' }}
               onChange={updateFilters.bind(this)}
