@@ -15,7 +15,6 @@ export default class NavBar extends Component {
 
     return (
       <Menu inverted style={{ margin: 0, borderRadius: 0 }}>
-        <Menu.Item header style={{ width: '245px' }}>
         <Menu.Item header style={{ width: '235px' }}>
           <Image src={logo} style={{ height: '20px', marginRight: '5px' }} />
           ManaPool
