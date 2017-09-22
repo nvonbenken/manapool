@@ -108,7 +108,7 @@ class SidebarOverlay extends Component {
     const { visible } = this.state;
 
     return (
-      <div style={{ width: '250px' }}>
+      <div style={{ minWidth: '235px' }}>
         <Sidebar
           as={Menu}
           visible={visible}

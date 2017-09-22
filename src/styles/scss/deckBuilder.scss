@@ -22,3 +22,13 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+.deck-item {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: scale(1);
+}
+
+.flicker-fix {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
