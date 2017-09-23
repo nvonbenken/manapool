@@ -3,7 +3,7 @@
 .card-list {
   flex: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   background-color: $white;
   padding: 10px;

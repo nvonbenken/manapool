@@ -2,6 +2,8 @@
   flex: 1;
   padding: 10px !important;
   overflow: auto;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .deck-details {

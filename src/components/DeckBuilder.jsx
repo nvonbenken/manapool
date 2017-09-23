@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import '../styles/app.css';
+import '../styles/main.css';
 import '../styles/navbar.css';
 
 import SidebarOverlay from './Sidebar';
@@ -71,7 +72,7 @@ class CardLookup extends Component {
 
   render() {
     return (
-      <div style={{ display: 'flex', flex: 1, height: 'calc(100vh - 85px)' }}>
+      <div className="main" style={{ flex: 1 }}>
         <SidebarOverlay onSearchComplete={this.searchResults.bind(this)} />
         <div style={{ display: 'flex', width: '100%' }}>
           <div style={{ display: 'flex', width: '75%', flexDirection: 'column' }}>

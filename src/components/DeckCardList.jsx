@@ -22,7 +22,7 @@ const DeckCardList = (props) => {
       return {
         key: item.id,
         title: (
-          <div className="deck-list-item flicker-fix">
+          <div className="deck-list-item">
             <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
               {item.name}
             </div>
@@ -47,7 +47,7 @@ const DeckCardList = (props) => {
     return {
       key: item.id,
       title: (
-        <div className="deck-list-item flicker-fix">
+        <div className="deck-list-item">
           <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
             {item.name}
           </div>
