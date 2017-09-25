@@ -74,7 +74,7 @@ const DeckCardList = (props) => {
 
   if (!cardItems || cardItems.length === 0) {
     return (
-      <div className="container" style={{ flex: 1, width: 'auto' }}>
+      <div className="container" style={{ flex: 1 }}>
         <p>To build a deck, use the search on the left to find cards.</p>
         <p>You can add and remove card from your deck as you like.</p>
         <p>The legalities of your deck, as well as the mana curve will update as you go.</p>

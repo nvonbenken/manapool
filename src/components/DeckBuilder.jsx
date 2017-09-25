@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import { Sidebar, Segment, Button, Menu, Image, Header, Tab } from 'semantic-ui-react';
 
 import '../styles/app.css';
 import '../styles/main.css';
 import '../styles/navbar.css';
+import '../styles/deckBuilder.css';
 
 import SidebarOverlay from './Sidebar';
 import DeckCardList from './DeckCardList';
 import DeckList from './DeckList';
+import DeckStats from './DeckStats';
 
 function CreateCard(card, quantity) {
   this.card = card;
@@ -23,9 +26,11 @@ class CardLookup extends Component {
       selectedCard: [],
       addedCard: undefined,
       quantity: 1,
+      deckListVisible: false,
     };
 
     this.handleSelectCard = this.handleSelectCard.bind(this);
+    this.toggleVisibility = () => this.setState({ deckListVisible: !this.state.deckListVisible });
   }
 
   handleSelectCard(selectedCard) {
@@ -71,22 +76,55 @@ class CardLookup extends Component {
   }
 
   render() {
+    const visible = this.state.deckListVisible;
+
+    const panes = [
+      { menuItem: 'Deck', render: () => <DeckList deck={this.state.deck} /> },
+      { menuItem: 'Stats', render: () => <DeckStats deck={this.state.deck} /> },
+    ];
+
     return (
-      <div className="main" style={{ flex: 1 }}>
-        <SidebarOverlay onSearchComplete={this.searchResults.bind(this)} />
-        <div style={{ display: 'flex', width: '100%' }}>
-          <div style={{ display: 'flex', width: '75%', flexDirection: 'column' }}>
-            <DeckCardList
-              style={{ flexGrow: 1, overflow: 'auto' }}
-              onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
-              addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
-              removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
-              cards={this.state.cards}
-              deck={this.state.deck}
-            />
-          </div>
-          <DeckList deck={this.state.deck} />
-        </div>
+      <div style={{ width: '100%' }}>
+        <Sidebar.Pushable as={Segment} style={{ border: 0, borderRadius: 0 }}>
+          <Sidebar
+            as={Menu}
+            animation="overlay"
+            direction="right"
+            visible={visible}
+            icon="labeled"
+            vertical
+            className="test"
+          >
+            <Button
+              onClick={this.toggleVisibility}
+              style={{
+                left: '-54px',
+                top: '50px',
+                transform: 'rotate(-90deg)',
+                position: 'absolute',
+                borderRadius: '0px',
+              }}
+            >
+              Deck
+            </Button>
+            <Tab panes={panes} />
+          </Sidebar>
+          <Sidebar.Pusher>
+            <div className="main" style={{ flex: 1 }}>
+              <SidebarOverlay onSearchComplete={this.searchResults.bind(this)} />
+              <div style={{ display: 'flex', width: '100%' }}>
+                <DeckCardList
+                  style={{ flexGrow: 1, overflow: 'auto' }}
+                  onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+                  addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+                  removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+                  cards={this.state.cards}
+                  deck={this.state.deck}
+                />
+              </div>
+            </div>
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </div>
     );
   }
