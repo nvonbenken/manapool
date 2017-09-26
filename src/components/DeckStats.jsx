@@ -32,7 +32,6 @@ class DeckList extends Component {
     let q = 0;
     deck.map((card) => {
       const t = card.card.type.includes('Creature') ? 'Creature' : card.card.type;
-      console.log(t);
       const x = typeData.get(t);
       if (x) {
         q = x.quantity + card.quantity;
@@ -49,17 +48,15 @@ class DeckList extends Component {
     const colorData = new Map();
     let q = 0;
     deck.map((card) => {
-      const x = colorData.get(card.card.colors ? card.card.colors.join('/') : '');
+      const c = card.card.colors ? card.card.colors.join('/') : 'Colorless';
+      const x = colorData.get(c);
       if (x) {
         q = x.quantity + card.quantity;
       } else {
         q = card.quantity;
       }
 
-      colorData.set(card.card.colors ? card.card.colors.join('/') : '', {
-        color: card.card.colors ? card.card.colors.join('/') : '',
-        quantity: q,
-      });
+      colorData.set(c, { color: c, quantity: q });
     });
 
     return Array.from(colorData.values());
