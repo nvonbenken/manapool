@@ -16,7 +16,7 @@ class DeckList extends Component {
     if (!this.props.deck || this.props.deck.size === 0) {
       return (
         <div style={{ flexGrow: 1, padding: '10px' }}>
-          <Button>Import</Button>
+          <Button disabled>Import</Button>
           <h4>Deck List:</h4>
           <div>No cards added.</div>
         </div>
@@ -72,8 +72,8 @@ class DeckList extends Component {
           overflow: 'auto',
         }}
       >
-        <Button>Import</Button>
-        <Button>Export</Button>
+        <Button disabled>Import</Button>
+        <Button disabled>Export</Button>
         <h4>Deck List ({cardCount} cards):</h4>
         <ul style={{ listStyle: 'none', padding: 0, width: 'calc(100% - 20px)' }}>
           <Accordion styled panels={panels} />
@@ -89,8 +89,8 @@ class DeckList extends Component {
           overflow: 'auto',
         }}
       >
-        <Button>Import</Button>
-        <Button>Export</Button>
+        <Button disabled>Import</Button>
+        <Button disabled>Export</Button>
         <h4>Deck List ({cardCount} cards):</h4>
         <ul style={{ listStyle: 'none', padding: 0, width: 'calc(100% - 20px)' }}>
           <Accordion styled panels={panels} />
