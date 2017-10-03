@@ -1,8 +1,6 @@
 import React from 'react';
 
-import '../styles/home.css';
-
-const Home = () => (
+const About = () => (
   <div className="container">
     <h1>Hello World!</h1>
     <p>This site began as a way to help me learn both React and MtG.</p>
@@ -18,4 +16,4 @@ const Home = () => (
   </div>
 );
 
-export default Home;
+export default About;

@@ -10,3 +10,21 @@
   min-height: calc(100vh - 150px);
   align-items: flex-start;
 }
+
+.card-container {
+  margin-left: 235px !important;
+}
+
+.card {
+  cursor: pointer;
+  height: fit-content;
+  padding: 5px;
+}
+
+.card:hover {
+  -webkit-transform: scale(1.05); /* Safari and Chrome */
+  -moz-transform: scale(1.05); /* Firefox */
+  -ms-transform: scale(1.05); /* IE 9 */
+  -o-transform: scale(1.05); /* Opera */
+  transform: scale(1.05);
+}

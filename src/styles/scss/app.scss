@@ -1,22 +1,4 @@
-@import 'colors';
-
-.app {
-  display: flex;
-  flex-direction: column;
-}
-
-.app-logo {
-  height: 40px;
-  text-align: center;
-}
-
-.app-header {
-  background-color: $shark;
-  height: 70px;
-  padding: 20px;
-  color: white;
-  text-align: center;
-}
+@import "colors";
 
 .app-footer {
   background-color: $shark;
@@ -30,34 +12,4 @@
   padding: 10px;
   text-decoration: none;
   color: white;
-}
-
-.flex-item {
-  flex-grow: 1;
-}
-
-.card-label {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.card {
-  cursor: pointer;
-  height: fit-content;
-  padding: 5px;
-}
-
-.card:hover {
-  -webkit-transform: scale(1.05); /* Safari and Chrome */
-  -moz-transform: scale(1.05); /* Firefox */
-  -ms-transform: scale(1.05); /* IE 9 */
-  -o-transform: scale(1.05); /* Opera */
-  transform: scale(1.05);
-}
-
-.search-bar {
-  text-align: left;
-  padding-bottom: 15px;
 }

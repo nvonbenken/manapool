@@ -1,9 +1,21 @@
+.deck-container {
+  flex: 1;
+  margin-left: 235px;
+}
+
 .deck-card-list {
   flex: 1;
   padding: 10px !important;
+  width: 100%;
   overflow: auto;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
+}
+
+.deck-list {
+  list-style: none;
+  padding: 0;
+  width: calc(100% - 20px);
 }
 
 .deck-details {
@@ -25,11 +37,6 @@
   overflow: hidden;
 }
 
-.deck-item {
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: scale(1);
-}
-
 .flicker-fix {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
@@ -43,4 +50,8 @@
 
 h4 {
   text-align: left;
+}
+
+div.item {
+  padding: 10px;
 }

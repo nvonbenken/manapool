@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Sidebar, Segment, Button, Menu, Image, Header, Tab } from 'semantic-ui-react';
+import { Sidebar, Segment, Button, Menu, Tab } from 'semantic-ui-react';
 
 import '../styles/app.css';
 import '../styles/main.css';
 import '../styles/navbar.css';
 import '../styles/deckBuilder.css';
 
-import SidebarOverlay from './Sidebar';
 import DeckCardList from './DeckCardList';
 import DeckList from './DeckList';
 import DeckStats from './DeckStats';
+import NewFilters from './NewFilters';
 
 function CreateCard(card, quantity) {
   this.card = card;
@@ -31,6 +31,7 @@ class CardLookup extends Component {
 
     this.handleSelectCard = this.handleSelectCard.bind(this);
     this.toggleVisibility = () => this.setState({ deckListVisible: !this.state.deckListVisible });
+    this.searchResults = this.searchResults.bind(this);
   }
 
   handleSelectCard(selectedCard) {
@@ -75,6 +76,14 @@ class CardLookup extends Component {
     }
   }
 
+  updateDimensions() {
+    if (window.innerWidth >= 1024) {
+      this.setState({ showTab: false });
+    } else {
+      this.setState({ showTab: true });
+    }
+  }
+
   render() {
     const visible = this.state.deckListVisible;
 
@@ -82,6 +91,25 @@ class CardLookup extends Component {
       { menuItem: 'Deck', render: () => <DeckList deck={this.state.deck} /> },
       { menuItem: 'Stats', render: () => <DeckStats deck={this.state.deck} /> },
     ];
+
+    if (!this.state.showTab) {
+      return (
+        <div style={{ display: 'flex', flex: 1 }}>
+          <NewFilters onSearchComplete={this.searchResults} />
+          <DeckCardList
+            style={{ flexGrow: 1, overflow: 'auto' }}
+            onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+            addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+            removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+            cards={this.state.cards}
+            deck={this.state.deck}
+          />
+          <div style={{ width: '30%', minWidth: '350px' }}>
+            <Tab panes={panes} />
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div style={{ width: '100%' }}>
@@ -110,18 +138,16 @@ class CardLookup extends Component {
             <Tab panes={panes} />
           </Sidebar>
           <Sidebar.Pusher>
-            <div className="main" style={{ flex: 1 }}>
-              <SidebarOverlay onSearchComplete={this.searchResults.bind(this)} />
-              <div style={{ display: 'flex', width: '100%' }}>
-                <DeckCardList
-                  style={{ flexGrow: 1, overflow: 'auto' }}
-                  onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
-                  addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
-                  removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
-                  cards={this.state.cards}
-                  deck={this.state.deck}
-                />
-              </div>
+            <div style={{ display: 'flex', flex: 1 }}>
+              <NewFilters onSearchComplete={this.searchResults} />
+              <DeckCardList
+                style={{ flexGrow: 1, overflow: 'auto' }}
+                onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+                addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+                removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+                cards={this.state.cards}
+                deck={this.state.deck}
+              />
             </div>
           </Sidebar.Pusher>
         </Sidebar.Pushable>

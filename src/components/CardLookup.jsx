@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { Modal } from 'semantic-ui-react';
 
-import '../styles/app.css';
-import '../styles/navbar.css';
-
-import SidebarOverlay from './Sidebar';
 import CardList from './CardList';
 import CardDetail from './CardDetail';
+import NewFilters from './NewFilters';
 
 class CardLookup extends Component {
   constructor(props) {
@@ -47,7 +44,7 @@ class CardLookup extends Component {
   render() {
     return (
       <div style={{ display: 'flex', flex: 1 }}>
-        <SidebarOverlay onSearchComplete={this.searchResults} />
+        <NewFilters onSearchComplete={this.searchResults} />
         <CardList
           onCardSelect={selectedCard => this.handleOpenModal(selectedCard)}
           cards={this.state.cards}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Accordion, Button } from 'semantic-ui-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 class DeckList extends Component {
   constructor(props) {

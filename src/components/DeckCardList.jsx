@@ -74,7 +74,7 @@ const DeckCardList = (props) => {
 
   if (!cardItems || cardItems.length === 0) {
     return (
-      <div className="container" style={{ flex: 1 }}>
+      <div className="container deck-container">
         <p>To build a deck, use the search on the left to find cards.</p>
         <p>You can add and remove card from your deck as you like.</p>
         <p>The legalities of your deck, as well as the mana curve will update as you go.</p>
@@ -82,9 +82,7 @@ const DeckCardList = (props) => {
     );
   }
 
-  return (
-    <Accordion styled className="deck-card-list" style={{ width: '100%' }} panels={cardItems} />
-  );
+  return <Accordion styled className="deck-container deck-card-list" panels={cardItems} />;
 };
 
 export default DeckCardList;

@@ -108,14 +108,14 @@ class SidebarOverlay extends Component {
     const { visible } = this.state;
 
     return (
-      <div style={{ minWidth: '235px' }}>
+      <div style={{ width: '235px' }}>
         <Sidebar
           as={Menu}
           visible={visible}
           icon="labeled"
           vertical
           inverted
-          style={{ position: 'inherit', padding: 0 }}
+          style={{ position: 'inherit', padding: 0, width: 'inherit' }}
         >
           <Menu.Item name="search">
             <SearchBar onSearchTermChange={cardSearch} />

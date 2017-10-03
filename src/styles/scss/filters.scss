@@ -1,7 +1,33 @@
-ul > li {
-  padding: 5px;
+@import "colors";
+
+.filters {
+  width: 235px;
+  height: 100vh;
+  padding: 10px;
+  background: $shark;
+  color: #ffffff;
+  position: fixed;
 }
 
-input + label {
-  margin-left: 5px;
+div.ui.icon.input {
+  padding: 5px;
+  width: -webkit-fill-available;
+
+  i.icon.search {
+    margin-right: 5px;
+  }
+}
+
+div.ui.multiple.dropdown {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 5px;
+  padding: 3px;
+  margin: 5px;
+
+  a.ui.label {
+    padding: inherit;
+    margin: inherit;
+    vertical-align: inherit;
+  }
 }

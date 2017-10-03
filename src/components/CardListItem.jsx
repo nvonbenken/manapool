@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/app.css';
+import '../styles/cardList.css';
 
 const CardListItem = ({ card, onCardSelect }) => (
   <div onClick={event => onCardSelect(card)} className="card">
