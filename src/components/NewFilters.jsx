@@ -32,6 +32,7 @@ class NewFilters extends Component {
   }
 
   onTermChange(term) {
+    this.resetSearch();
     this.setState({ term }, _.debounce(this.cardSearch, 300));
   }
 
@@ -58,6 +59,12 @@ class NewFilters extends Component {
         cards: this.state.cards + this.cardSearch(),
       });
     }
+  }
+
+  resetSearch() {
+    this.setState({ page: 1 });
+    this.setState({ cards: [] });
+    this.props.onSearchComplete('');
   }
 
   cardSearch = () => {

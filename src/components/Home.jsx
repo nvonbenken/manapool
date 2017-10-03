@@ -9,6 +9,9 @@ const Home = () => (
     <p>
       Check out the functional <a href="/cardlookup">Card Lookup</a> tool.
     </p>
+    <p>
+      The <a href="/deckbuilder">Deck Builder</a> is also mostly complete.
+    </p>
   </div>
 );
 
