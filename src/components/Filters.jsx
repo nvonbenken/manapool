@@ -1,181 +1,188 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Input, Accordion, Icon } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Input, Dropdown } from 'semantic-ui-react';
 
 import '../styles/filters.css';
 
 class Filters extends Component {
-  static propTypes = {
-    onFilterChange: PropTypes.func,
-  };
-
   constructor(props) {
     super(props);
 
     this.state = {
-      filters: [],
+      term: '',
+      cmc: '',
+      cards: [],
+      colors: [],
+      types: [],
+      rarity: [],
+      legality: [],
+      page: 1,
+      visible: true,
     };
 
-    this.updateFilters = this.updateFilters.bind(this);
+    this.handleScroll = this.handleScroll.bind(this, this.state.page, this.state.cards);
   }
 
-  getColors() {
-    const elements = document.getElementById('colorList').querySelectorAll('input:checked');
-    const values = Array.prototype.map.call(elements, (el, i) => el.value);
-    return values.join('|');
+  componentDidMount() {
+    window.addEventListener('scroll', _.throttle(this.handleScroll, 300));
   }
 
-  getTypes() {
-    const elements = document.getElementById('typeList').querySelectorAll('input:checked');
-    const values = Array.prototype.map.call(elements, (el, i) => el.value);
-    return values.join('|');
+  componentWillUnmount() {
+    window.removeEventListener('scroll', _.throttle(this.handleScroll, 300));
   }
 
-  getRarity() {
-    const elements = document.getElementById('rarityList').querySelectorAll('input:checked');
-    const values = Array.prototype.map.call(elements, (el, i) => el.value);
-    return values.join('|');
-  }
+  onTermChange = (term) => {
+    this.resetSearch();
+    this.setState({ term }, _.debounce(this.cardSearch, 300));
+  };
 
-  getLegality() {
-    const elements = document.getElementById('legalityList').querySelectorAll('input:checked');
-    const values = Array.prototype.map.call(elements, (el, i) => el.value);
-    return values.join('|');
-  }
+  onCmcChange = (cmc) => {
+    this.resetSearch();
+    this.setState({ cmc }, _.debounce(this.cardSearch, 300));
+  };
 
-  getCost() {
-    return document.getElementById('costInput').value;
-  }
+  handleScroll = () => {
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight,
+    );
 
-  updateFilters() {
-    const colors = this.getColors();
-    const types = this.getTypes();
-    const rarity = this.getRarity();
-    const cost = this.getCost();
-    const legality = this.getLegality();
-    this.setState({ filters: [colors, types, rarity, cost, legality] });
-    this.props.onFilterChange([colors, types, rarity, cost, legality]);
-  }
+    const pixelsFromWindowBottomToBottom = 0 + docHeight - window.scrollY - window.innerHeight;
+
+    if (pixelsFromWindowBottomToBottom < 200) {
+      this.setState({ page: this.state.page + 1 });
+      this.setState({
+        cards: this.state.cards + this.cardSearch(),
+      });
+    }
+  };
+
+  resetSearch = () => {
+    this.setState({ page: 1 });
+    this.setState({ cards: [] });
+    this.props.onSearchComplete('');
+  };
+
+  cardSearch = () => {
+    fetch(
+      `https://api.magicthegathering.io/v1/cards?contains=imageUrl&pageSize=28&page=${this.state
+        .page}&name=${this.state.term}&colors=${this.state.colors.join(
+        '|',
+      )}&types=${this.state.types.join('|')}&rarity=${this.state.rarity.join('|')}&cmc=${this.state
+        .cmc}&gameFormat=${this.state.legality.join('|')}`,
+    )
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({
+          cards: this.state.cards.concat(responseJson.cards),
+        });
+        this.props.onSearchComplete(responseJson.cards);
+      });
+  };
 
   render() {
     const colors = [
-      { value: 'white', label: 'White' },
-      { value: 'black', label: 'Black' },
-      { value: 'red', label: 'Red' },
-      { value: 'green', label: 'Green' },
-      { value: 'blue', label: 'Blue' },
+      { key: 'white', value: 'white', text: 'White' },
+      { key: 'black', value: 'black', text: 'Black' },
+      { key: 'red', value: 'red', text: 'Red' },
+      { key: 'green', value: 'green', text: 'Green' },
+      { key: 'blue', value: 'blue', text: 'Blue' },
     ];
 
     const types = [
-      { value: 'instant', label: 'Instant' },
-      { value: 'sorcery', label: 'Sorcery' },
-      { value: 'artifact', label: 'Artifact' },
-      { value: 'creature', label: 'Creature' },
-      { value: 'enchantment', label: 'Enchantment' },
-      { value: 'land', label: 'Land' },
-      { value: 'plainswalker', label: 'Plainswalker' },
-      { value: 'plane', label: 'Plane' },
-      { value: 'phenomenon', label: 'Phenomenon' },
-      { value: 'scheme', label: 'Scheme' },
-      { value: 'tribal', label: 'Tribal' },
-      { value: 'vanguard', label: 'Vanguard' },
+      { key: 'instant', value: 'instant', text: 'Instant' },
+      { key: 'sorcery', value: 'sorcery', text: 'Sorcery' },
+      { key: 'artifact', value: 'artifact', text: 'Artifact' },
+      { key: 'creature', value: 'creature', text: 'Creature' },
+      { key: 'enchantment', value: 'enchantment', text: 'Enchantment' },
+      { key: 'land', value: 'land', text: 'Land' },
+      { key: 'plainswalker', value: 'plainswalker', text: 'Plainswalker' },
+      { key: 'plane', value: 'plane', text: 'Plane' },
+      { key: 'phenomenon', value: 'phenomenon', text: 'Phenomenon' },
+      { key: 'scheme', value: 'scheme', text: 'Scheme' },
+      { key: 'tribal', value: 'tribal', text: 'Tribal' },
+      { key: 'vanguard', value: 'vanguard', text: 'Vanguard' },
     ];
 
     const rarity = [
-      { value: 'common', label: 'Common' },
-      { value: 'uncommon', label: 'Uncommon' },
-      { value: 'rare', label: 'Rare' },
-      { value: 'mythic rare', label: 'Mythic Rare' },
-      { value: 'special', label: 'Special' },
-      { value: 'basic land', label: 'Basic Land' },
+      { key: 'common', value: 'common', text: 'Common' },
+      { key: 'uncommon', value: 'uncommon', text: 'Uncommon' },
+      { key: 'rare', value: 'rare', text: 'Rare' },
+      { key: 'mythic rare', value: 'mythic rare', text: 'Mythic Rare' },
+      { key: 'special', value: 'special', text: 'Special' },
+      { key: 'basic land', value: 'basic land', text: 'Basic Land' },
     ];
 
     const legality = [
-      { value: 'commander', label: 'Commander' },
-      { value: 'legacy', label: 'Legacy' },
-      { value: 'modern', label: 'Modern' },
-      { value: 'standard', label: 'Standard' },
-      { value: 'vintage', label: 'Vintage' },
+      { key: 'commander', value: 'commander', text: 'Commander' },
+      { key: 'legacy', value: 'legacy', text: 'Legacy' },
+      { key: 'modern', value: 'modern', text: 'Modern' },
+      { key: 'standard', value: 'standard', text: 'Standard' },
+      { key: 'vintage', value: 'vintage', text: 'Vintage' },
     ];
 
     return (
-      <div>
-        <div style={{ textAlign: 'left' }}>
-          <h4>Cost:</h4>
-          <Input
-            id="costInput"
-            icon="search"
-            type="number"
-            placeholder="CMC"
-            style={{ marginBottom: '10px' }}
-            onChange={_.debounce(this.updateFilters, 300)}
-          />
-          <Accordion inverted>
-            <Accordion.Title style={{ paddingBottom: 0 }}>
-              <Icon name="dropdown" />
-              <h4 style={{ display: 'inline' }}>Color</h4>
-            </Accordion.Title>
-            <Accordion.Content>
-              <ul id="colorList" style={{ listStyle: 'none', margin: 0 }}>
-                {colors.map(color => (
-                  <li>
-                    <input type="checkbox" value={color.value} onChange={this.updateFilters} />
-                    <label>{color.label}</label>
-                  </li>
-                ))}
-              </ul>
-            </Accordion.Content>
-          </Accordion>
-          <Accordion inverted>
-            <Accordion.Title style={{ paddingBottom: 0 }}>
-              <Icon name="dropdown" />
-              <h4 style={{ display: 'inline' }}>Type</h4>
-            </Accordion.Title>
-            <Accordion.Content>
-              <ul id="typeList" style={{ listStyle: 'none', margin: 0 }}>
-                {types.map(type => (
-                  <li>
-                    <input type="checkbox" value={type.value} onChange={this.updateFilters} />
-                    <label>{type.label}</label>
-                  </li>
-                ))}
-              </ul>
-            </Accordion.Content>
-          </Accordion>
-          <Accordion inverted>
-            <Accordion.Title style={{ paddingBottom: 0 }}>
-              <Icon name="dropdown" />
-              <h4 style={{ display: 'inline' }}>Rarity</h4>
-            </Accordion.Title>
-            <Accordion.Content>
-              <ul id="rarityList" style={{ listStyle: 'none', margin: 0 }}>
-                {rarity.map(rare => (
-                  <li>
-                    <input type="checkbox" value={rare.value} onChange={this.updateFilters} />
-                    <label>{rare.value}</label>
-                  </li>
-                ))}
-              </ul>
-            </Accordion.Content>
-          </Accordion>
-          <Accordion inverted>
-            <Accordion.Title style={{ paddingBottom: 0 }}>
-              <Icon name="dropdown" />
-              <h4 style={{ display: 'inline' }}>Legality</h4>
-            </Accordion.Title>
-            <Accordion.Content>
-              <ul id="legalityList" style={{ listStyle: 'none', margin: 0 }}>
-                {legality.map(legal => (
-                  <li>
-                    <input type="checkbox" value={legal.value} onChange={this.updateFilters} />
-                    <label>{legal.label}</label>
-                  </li>
-                ))}
-              </ul>
-            </Accordion.Content>
-          </Accordion>
-        </div>
+      <div className="filters">
+        <label>Name:</label>
+        <Input
+          icon="search"
+          value={this.state.term}
+          onChange={event => this.onTermChange(event.target.value)}
+          placeholder="Card Name"
+        />
+        <label>Cost:</label>
+        <Input
+          icon="search"
+          value={this.state.cmc}
+          onChange={event => this.onCmcChange(event.target.value)}
+          placeholder="CMC"
+          type="number"
+        />
+        <label>Colors:</label>
+        <Dropdown
+          placeholder="Colors"
+          multiple
+          selection
+          options={colors}
+          onChange={(e, data) => {
+            this.setState({ colors: data.value }, this.cardSearch);
+          }}
+        />
+        <label>Types:</label>
+        <Dropdown
+          placeholder="Types"
+          multiple
+          selection
+          options={types}
+          onChange={(e, data) => {
+            this.setState({ types: data.value }, this.cardSearch);
+          }}
+        />
+        <label>Rarity:</label>
+        <Dropdown
+          placeholder="Rarity"
+          multiple
+          selection
+          options={rarity}
+          onChange={(e, data) => {
+            this.setState({ rarity: data.value }, this.cardSearch);
+          }}
+        />
+        <label>Legality:</label>
+        <Dropdown
+          placeholder="Legality"
+          multiple
+          selection
+          options={legality}
+          onChange={(e, data) => {
+            this.setState({ legality: data.value }, this.cardSearch);
+          }}
+        />
       </div>
     );
   }

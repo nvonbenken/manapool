@@ -3,7 +3,7 @@ import { Modal } from 'semantic-ui-react';
 
 import CardList from './CardList';
 import CardDetail from './CardDetail';
-import NewFilters from './NewFilters';
+import Filters from './Filters';
 
 class CardLookup extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class CardLookup extends Component {
   render() {
     return (
       <div style={{ display: 'flex', flex: 1 }}>
-        <NewFilters onSearchComplete={this.searchResults} />
+        <Filters onSearchComplete={this.searchResults} />
         <CardList
           onCardSelect={selectedCard => this.handleOpenModal(selectedCard)}
           cards={this.state.cards}

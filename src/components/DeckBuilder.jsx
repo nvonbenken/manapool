@@ -9,7 +9,7 @@ import '../styles/deckBuilder.css';
 import DeckCardList from './DeckCardList';
 import DeckList from './DeckList';
 import DeckStats from './DeckStats';
-import NewFilters from './NewFilters';
+import Filters from './Filters';
 
 function CreateCard(card, quantity) {
   this.card = card;
@@ -95,7 +95,7 @@ class CardLookup extends Component {
     if (!this.state.showTab) {
       return (
         <div style={{ display: 'flex', flex: 1 }}>
-          <NewFilters onSearchComplete={this.searchResults} />
+          <Filters onSearchComplete={this.searchResults} />
           <DeckCardList
             style={{ flexGrow: 1, overflow: 'auto' }}
             onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
@@ -139,7 +139,7 @@ class CardLookup extends Component {
           </Sidebar>
           <Sidebar.Pusher>
             <div style={{ display: 'flex', flex: 1 }}>
-              <NewFilters onSearchComplete={this.searchResults} />
+              <Filters onSearchComplete={this.searchResults} />
               <DeckCardList
                 style={{ flexGrow: 1, overflow: 'auto' }}
                 onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
