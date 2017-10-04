@@ -5,7 +5,7 @@ import '../styles/cardList.css';
 import '../styles/main.css';
 
 const CardList = (props) => {
-  const cardItems = props.cards.map(card => (
+  const cardItems = Array.from(props.cards.values()).map(card => (
     <CardListItem onCardSelect={props.onCardSelect} key={card.id} card={card} />
   ));
 

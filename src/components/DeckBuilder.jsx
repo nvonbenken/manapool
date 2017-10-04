@@ -21,24 +21,32 @@ class CardLookup extends Component {
     super(props);
 
     this.state = {
-      cards: [],
+      cards: new Map(),
       deck: new Map(),
       selectedCard: [],
       addedCard: undefined,
       quantity: 1,
       deckListVisible: false,
+      showTab: false,
     };
-
-    this.handleSelectCard = this.handleSelectCard.bind(this);
-    this.toggleVisibility = () => this.setState({ deckListVisible: !this.state.deckListVisible });
-    this.searchResults = this.searchResults.bind(this);
   }
 
-  handleSelectCard(selectedCard) {
+  componentDidMount() {
+    this.updateDimensions();
+    window.addEventListener('resize', this.updateDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions);
+  }
+
+  toggleVisibility = () => this.setState({ deckListVisible: !this.state.deckListVisible });
+
+  handleSelectCard = (selectedCard) => {
     this.setState({ selectedCard });
-  }
+  };
 
-  handleAddCard(card, quantity) {
+  handleAddCard = (card, quantity) => {
     const d = this.state.deck;
     let x = d.get(card.name);
 
@@ -50,9 +58,9 @@ class CardLookup extends Component {
 
     d.set(card.name, x);
     this.setState({ deck: d });
-  }
+  };
 
-  handleRemoveCard(card) {
+  handleRemoveCard = (card) => {
     const d = this.state.deck;
     const x = d.get(card.name);
 
@@ -66,23 +74,23 @@ class CardLookup extends Component {
     }
 
     this.setState({ deck: d });
-  }
+  };
 
-  searchResults(cards) {
+  searchResults = (cards) => {
     if (!cards) {
-      this.setState({ cards: [] });
+      this.setState({ cards: new Map() });
     } else {
-      this.setState({ cards: this.state.cards.concat(cards) });
+      this.setState({ cards: new Map([...this.state.cards, ...cards]) });
     }
-  }
+  };
 
-  updateDimensions() {
+  updateDimensions = () => {
     if (window.innerWidth >= 1024) {
       this.setState({ showTab: false });
     } else {
       this.setState({ showTab: true });
     }
-  }
+  };
 
   render() {
     const visible = this.state.deckListVisible;

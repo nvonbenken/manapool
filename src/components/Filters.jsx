@@ -11,7 +11,7 @@ class Filters extends Component {
     this.state = {
       term: '',
       cmc: '',
-      cards: [],
+      cards: new Map(),
       colors: [],
       types: [],
       rarity: [],
@@ -57,14 +57,14 @@ class Filters extends Component {
     if (pixelsFromWindowBottomToBottom < 200) {
       this.setState({ page: this.state.page + 1 });
       this.setState({
-        cards: this.state.cards + this.cardSearch(),
+        cards: new Map(this.state.cards, this.cardSearch()),
       });
     }
   };
 
   resetSearch = () => {
     this.setState({ page: 1 });
-    this.setState({ cards: [] });
+    this.setState({ cards: new Map() });
     this.props.onSearchComplete('');
   };
 
@@ -78,10 +78,14 @@ class Filters extends Component {
     )
       .then(response => response.json())
       .then((responseJson) => {
-        this.setState({
-          cards: this.state.cards.concat(responseJson.cards),
+        const m = new Map();
+        responseJson.cards.forEach((e) => {
+          m.set(e.name, e);
         });
-        this.props.onSearchComplete(responseJson.cards);
+        this.setState({
+          cards: new Map(this.state.cards, m),
+        });
+        this.props.onSearchComplete(m);
       });
   };
 

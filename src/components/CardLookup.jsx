@@ -10,36 +10,32 @@ class CardLookup extends Component {
     super(props);
 
     this.state = {
-      cards: [],
+      cards: new Map(),
       selectedCard: null,
       showModal: false,
     };
-
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.searchResults = this.searchResults.bind(this);
   }
 
-  handleOpenModal(selectedCard) {
+  handleOpenModal = (selectedCard) => {
     this.setState({ selectedCard });
     this.setState({ showModal: true });
-  }
+  };
 
-  handleCloseModal() {
+  handleCloseModal = () => {
     this.setState({ showModal: false });
-  }
+  };
 
-  searchResults(cards) {
+  searchResults = (cards) => {
     if (!cards) {
-      this.setState({ cards: [] });
+      this.setState({ cards: new Map() });
     } else {
-      this.setState({ cards: this.state.cards.concat(cards) });
+      this.setState({ cards: new Map([...this.state.cards, ...cards]) });
     }
-  }
+  };
 
-  selectedCard(card) {
+  selectedCard = (card) => {
     this.setState({ selectedCard: card });
-  }
+  };
 
   render() {
     return (

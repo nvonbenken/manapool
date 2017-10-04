@@ -70,7 +70,7 @@ const DeckCardList = (props) => {
     };
   };
 
-  const cardItems = props.cards.map(toPanel);
+  const cardItems = Array.from(props.cards.values()).map(toPanel);
 
   if (!cardItems || cardItems.length === 0) {
     return (
