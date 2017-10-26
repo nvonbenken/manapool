@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Image } from 'semantic-ui-react';
+import { Menu, Image, Dropdown, Form, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import logo from '../images/logo.svg';
@@ -38,14 +38,30 @@ export default class NavBar extends Component {
             onClick={this.handleItemClick}
           />
         </Link>
-        <Menu.Item
-          name="Login"
-          position="right"
-          active={activeItem === 'Login'}
-          onClick={this.handleItemClick}
-        >
-          <Link to="/login">Login</Link>
-        </Menu.Item>
+        <Dropdown item simple text="Login">
+          <Dropdown.Menu style={{ padding: '10px' }}>
+            <Form>
+              <Form.Field>
+                <label>Username</label>
+                <input placeholder="username" />
+              </Form.Field>
+              <Form.Field>
+                <label>Password</label>
+                <input placeholder="password" />
+              </Form.Field>
+              <div className="loginLink">
+                <a href="#">Forgot password?</a>
+              </div>
+              <div className="loginLink">
+                <a href="#">New? Create an account!</a>
+              </div>
+              <Button type="submit">
+                <Link to="/implicit/callback" />
+                Login
+              </Button>
+            </Form>
+          </Dropdown.Menu>
+        </Dropdown>
       </Menu>
     );
   }
