@@ -63,7 +63,6 @@ class DeckList extends Component {
 
   render() {
     const data = Array.from(this.props.deck.values());
-    console.log(data);
     if (!this.props.deck || this.props.deck.size === 0) {
       return (
         <div style={{ flexGrow: 1, padding: '10px' }}>

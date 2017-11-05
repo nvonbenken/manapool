@@ -33,7 +33,7 @@ class CardLookup extends Component {
 
   componentWillMount() {
     // Check cache for deck
-    const cacheResults = localStorage.getItem('deck');
+    const cacheResults = sessionStorage.getItem('deck');
 
     if (cacheResults) {
       this.setState({ deck: new Map(JSON.parse(cacheResults)) });
@@ -47,7 +47,7 @@ class CardLookup extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
-    localStorage.setItem('deck', JSON.stringify(Array.from(this.state.deck.entries())));
+    sessionStorage.setItem('deck', JSON.stringify(Array.from(this.state.deck.entries())));
   }
 
   toggleVisibility = () => this.setState({ deckListVisible: !this.state.deckListVisible });
@@ -68,7 +68,7 @@ class CardLookup extends Component {
 
     d.set(card.name, x);
     this.setState({ deck: d });
-    localStorage.setItem('deck', JSON.stringify(Array.from(this.state.deck.entries())));
+    sessionStorage.setItem('deck', JSON.stringify(Array.from(this.state.deck.entries())));
   };
 
   handleRemoveCard = (card) => {
@@ -85,7 +85,7 @@ class CardLookup extends Component {
     }
 
     this.setState({ deck: d });
-    localStorage.setItem('deck', JSON.stringify(Array.from(this.state.deck.entries())));
+    sessionStorage.setItem('deck', JSON.stringify(Array.from(this.state.deck.entries())));
   };
 
   searchResults = (cards) => {
