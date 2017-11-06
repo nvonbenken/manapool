@@ -6,7 +6,7 @@ const CardListItem = ({ card, onCardSelect }) => (
   <div onClick={event => onCardSelect(card)} className="card">
     <div>
       <div>
-        <ProgressiveImage src={card.imageUrl}>
+        <ProgressiveImage src={card.imageUrl} placeholder="../images/card_back-min.jpg">
           {src => (
             <img
               src={src}
