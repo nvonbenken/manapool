@@ -3,26 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@okta/okta-react": "0.0.5",
-    "@okta/okta-signin-widget": "^2.3.0",
+    "auth0-js": "^8.12.0",
+    "history": "^4.7.2",
     "lodash": "^4.17.4",
     "mtgsdk": "^0.3.0",
     "node-sass-chokidar": "0.0.3",
     "normalize.css": "^7.0.0",
-    "npm-run-all": "^4.1.1",
+    "npm-run-all": "^4.1.2",
     "prop-types": "^15.6.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-modal": "^2.4.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-progressive-image": "^0.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.14",
-    "recharts": "^1.0.0-beta.0",
-    "semantic-ui-react": "^0.72.0"
+    "react-scripts": "^1.0.17",
+    "recharts": "^1.0.0-beta.6",
+    "semantic-ui-react": "^0.77.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/styles/scss/ -o src/styles/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/styles/scss/ -o src/styles/ --watch --recursive",
+    "watch-css":
+      "npm run build-css && node-sass-chokidar src/styles/scss/ -o src/styles/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
@@ -30,11 +30,12 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^4.10.0",
+    "eslint": "^4.12.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.3.0",
-    "prettier-eslint": "^8.2.1"
+    "eslint-plugin-react": "^7.5.1",
+    "prettier-eslint": "^8.2.5",
+    "why-did-you-update": "0.0.8"
   }
 }

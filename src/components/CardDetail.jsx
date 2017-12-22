@@ -1,182 +1,348 @@
-import React from 'react';
-import { Table, Divider } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Table, Divider, Button } from 'semantic-ui-react';
 
 import '../styles/cardDetail.css';
 
-const CardDetail = ({ card }) => {
-  if (!card) {
-    return <div>Loading...</div>;
+class CardDetail extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cost: null,
+      page: 0,
+      loading: true,
+    };
   }
 
-  let rulings = null;
+  getProductIds = () => {
+    const data = {
+      offset: 0,
+      limit: 10,
+      includeAggregates: true,
+      filters: [
+        { name: 'ProductName', values: [this.props.cardArr[this.state.page].name] },
+        { name: 'SetName', values: [this.props.cardArr[this.state.page].setName] },
+      ],
+    };
 
-  if (typeof card.rulings === 'undefined') {
-    rulings = (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Rulings</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>No rulings found.</Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-    );
-  } else {
-    rulings = (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell colSpan="2">Rulings</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Date</Table.HeaderCell>
-            <Table.HeaderCell>Ruling</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {card.rulings.map(item => (
-            <Table.Row key={item.multiverseid}>
-              <Table.Cell style={{ width: '100px' }}>{item.date}</Table.Cell>
-              <Table.Cell>{item.text}</Table.Cell>
+    return fetch(
+      'https://cors-anywhere.herokuapp.com/http://api.tcgplayer.com/v1.6.0/catalog/categories/1/search',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${this.props.accessToken}`,
+        },
+        body: JSON.stringify(data),
+      },
+    ).then(response => response.json());
+  };
+
+  getProductInfo = ids =>
+    fetch(
+      `https://cors-anywhere.herokuapp.com/http://api.tcgplayer.com/v1.5.0/catalog/products/${ids.join()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${this.props.accessToken}`,
+        },
+      },
+    )
+      .then(response => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      });
+
+  getProductMarketPrice = ids =>
+    fetch(
+      `https://cors-anywhere.herokuapp.com/http://api.tcgplayer.com/v1.6.0/pricing/product/${ids.join()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${this.props.accessToken}`,
+        },
+      },
+    )
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({ cost: responseJson.results[0] });
+      });
+
+  handleClick = (event, type) => {
+    if (type === 'add' && this.state.page < this.props.cardArr.length - 1) {
+      this.setState({ page: this.state.page + 1 });
+    } else if (type === 'subtract' && this.state.page > 0) {
+      this.setState({ page: this.state.page - 1 });
+    }
+  };
+
+  render() {
+    if (!this.props.cardArr) {
+      return <div>Loading...</div>;
+    }
+
+    let rulings = null;
+
+    if (typeof this.props.cardArr[this.state.page].rulings === 'undefined') {
+      rulings = (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Rulings</Table.HeaderCell>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-    );
-  }
-
-  let legalities = null;
-
-  if (typeof card.legalities === 'undefined') {
-    legalities = (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Legalities</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>No legalities found..</Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-    );
-  } else {
-    legalities = (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell colSpan="2">Legalities</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Format</Table.HeaderCell>
-            <Table.HeaderCell>Legality</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {card.legalities.map(item => (
-            <Table.Row key={item.multiverseid}>
-              <Table.Cell style={{ width: '100px' }}>{item.format}</Table.Cell>
-              <Table.Cell>{item.legality}</Table.Cell>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>No rulings found.</Table.Cell>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-    );
-  }
+          </Table.Body>
+        </Table>
+      );
+    } else {
+      rulings = (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell colSpan="2">Rulings</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Date</Table.HeaderCell>
+              <Table.HeaderCell>Ruling</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {this.props.cardArr[this.state.page].rulings.map(item => (
+              <Table.Row key={item.multiverseid}>
+                <Table.Cell style={{ width: '100px' }}>{item.date}</Table.Cell>
+                <Table.Cell>{item.text}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      );
+    }
 
-  return (
-    <div>
-      <div className="details">
-        <div className="image-container">
-          <img src={card.imageUrl} alt="Loading..." />
-          <a
-            href={`http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=${card.multiverseid}`}
-          >
-            View on Wizards.com
-          </a>
+    let legalities = null;
+
+    if (typeof this.props.cardArr[this.state.page].legalities === 'undefined') {
+      legalities = (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Legalities</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>No legalities found.</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      );
+    } else {
+      legalities = (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell colSpan="2">Legalities</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Format</Table.HeaderCell>
+              <Table.HeaderCell>Legality</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {this.props.cardArr[this.state.page].legalities.map(item => (
+              <Table.Row key={item.multiverseid}>
+                <Table.Cell style={{ width: '100px' }}>{item.format}</Table.Cell>
+                <Table.Cell>{item.legality}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      );
+    }
+
+    let cost = null;
+
+    if (this.state.cost === null && !this.state.loading) {
+      cost = (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Card Price</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>Not Found</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      );
+    } else if (this.state.cost === null) {
+      cost = (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Card Price</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>Loading</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      );
+    } else {
+      cost = (
+        <div>
+          <Table celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell colSpan="2">Card Price</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Type</Table.HeaderCell>
+                <Table.HeaderCell>Price</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row key={this.state.cost.productId}>
+                <Table.Cell style={{ width: '100px' }}>Low Price</Table.Cell>
+                <Table.Cell>${this.state.cost.lowPrice.toFixed(2)}</Table.Cell>
+              </Table.Row>
+              <Table.Row key={this.state.cost.productId}>
+                <Table.Cell style={{ width: '100px' }}>Mid Price</Table.Cell>
+                <Table.Cell>${this.state.cost.midPrice.toFixed(2)}</Table.Cell>
+              </Table.Row>
+              <Table.Row key={this.state.cost.productId}>
+                <Table.Cell style={{ width: '100px' }}>High Price</Table.Cell>
+                <Table.Cell>${this.state.cost.highPrice.toFixed(2)}</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+          <div>
+            All prices are provided by <a href="www.tcgplayer.com">TCGPlayer</a>
+          </div>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div>
-            <label>
-              <strong>Name: </strong>
-            </label>
-            {card.name}
-          </div>
-          <div>
-            <label>
-              <strong>Mana Cost: </strong>
-            </label>
-            {card.manaCost}
-          </div>
-          <div>
-            <label>
-              <strong>Type: </strong>
-            </label>
-            {card.type}
-          </div>
-          <div>
-            <label>
-              <strong>Color: </strong>
-            </label>
-            {card.colors}
-          </div>
-          <div>
-            <label>
-              <strong>Rarity: </strong>
-            </label>
-            {card.rarity}
-          </div>
-          <div>
-            <label>
-              <strong>Set: </strong>
-            </label>
-            {card.setName}
-          </div>
-          <div>
-            <label>
-              <strong>Text: </strong>
-            </label>
-            {card.text}
-          </div>
-          <div>
-            <label>
-              <strong>Flavor: </strong>
-            </label>
-            {card.flavor}
-          </div>
-          <div>
-            <label>
-              <strong>Artist: </strong>
-            </label>
-            {card.artist}
-          </div>
-        </div>
-      </div>
-      <Divider />
+      );
+    }
+
+    if (this.props.accessToken !== null && this.state.cost === null && this.state.loading) {
+      this.getProductIds().then((results) => {
+        if (results.totalItems > 0) {
+          this.getProductMarketPrice(results.results);
+        }
+        this.setState({ loading: false });
+      });
+    }
+
+    return (
       <div>
-        <div style={{ display: 'flex' }}>
-          <div style={{ paddingRight: '10px' }}>{legalities}</div>
-          <div>{rulings}</div>
+        <div className="details">
+          <div className="image-container">
+            <img src={this.props.cardArr[this.state.page].imageUrl} alt="Loading..." />
+            <a
+              href={`http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=${
+                this.props.cardArr[this.state.page].multiverseid
+              }`}
+            >
+              View on Wizards.com
+            </a>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <label>
+                <strong>Name: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].name}
+            </div>
+            <div>
+              <label>
+                <strong>Mana Cost: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].manaCost}
+            </div>
+            <div>
+              <label>
+                <strong>Type: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].type}
+            </div>
+            <div>
+              <label>
+                <strong>Color: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].colors}
+            </div>
+            <div>
+              <label>
+                <strong>Rarity: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].rarity}
+            </div>
+            <div>
+              <label>
+                <strong>Set: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].setName}
+            </div>
+            <div>
+              <label>
+                <strong>Text: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].text}
+            </div>
+            <div>
+              <label>
+                <strong>Flavor: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].flavor}
+            </div>
+            <div>
+              <label>
+                <strong>Artist: </strong>
+              </label>
+              {this.props.cardArr[this.state.page].artist}
+            </div>
+          </div>
+        </div>
+        {this.props.cardArr.length > 1 ? (
+          <div>
+            <Button content="Previous" onClick={event => this.handleClick(event, 'subtract')} />
+            <Button content="Next" onClick={event => this.handleClick(event, 'add')} />
+          </div>
+        ) : null}
+
+        <Divider />
+        <div>
+          <div style={{ display: 'flex' }}>
+            <div style={{ paddingRight: '10px' }}>{legalities}</div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div>{rulings}</div>
+              <div style={{ paddingTop: '10px' }}>{cost}</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default CardDetail;

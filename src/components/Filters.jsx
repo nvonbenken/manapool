@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { Input, Dropdown } from 'semantic-ui-react';
+import mtg from 'mtgsdk';
 
 import '../styles/filters.css';
 
@@ -33,12 +34,12 @@ class Filters extends Component {
 
   onTermChange = (term) => {
     this.resetSearch();
-    this.setState({ term }, _.debounce(this.cardSearch, 300));
+    this.setState({ term }, _.debounce(this.getCards, 300));
   };
 
   onCmcChange = (cmc) => {
     this.resetSearch();
-    this.setState({ cmc }, _.debounce(this.cardSearch, 300));
+    this.setState({ cmc }, _.debounce(this.getCards, 300));
   };
 
   handleScroll = () => {
@@ -57,7 +58,7 @@ class Filters extends Component {
     if (pixelsFromWindowBottomToBottom < 200) {
       this.setState({ page: this.state.page + 1 });
       this.setState({
-        cards: new Map(this.state.cards, this.cardSearch()),
+        cards: new Map(this.state.cards, this.getCards()),
       });
     }
   };
@@ -68,13 +69,45 @@ class Filters extends Component {
     this.props.onSearchComplete('');
   };
 
+  getCards = () => {
+    mtg.card
+      .where({
+        name: this.state.term,
+        pageSize: 28,
+        page: this.state.page,
+        contains: 'imageUrl',
+        colors: this.state.colors.join('|'),
+        types: this.state.types.join('|'),
+        rarity: this.state.rarity.join('|'),
+        gameFormat: this.state.legality.join('|'),
+      })
+      .then((cards) => {
+        const map = new Map();
+        cards.forEach((card) => {
+          let x = map.get(card.name);
+
+          if (x) {
+            x.push(card);
+          } else {
+            x = [card];
+          }
+
+          map.set(card.name, x);
+        });
+        this.setState({ cards: map });
+        this.props.onSearchComplete(map);
+      });
+  };
+
   cardSearch = () => {
     fetch(
-      `https://api.magicthegathering.io/v1/cards?contains=imageUrl&pageSize=28&page=${this.state
-        .page}&name=${this.state.term}&colors=${this.state.colors.join(
+      `https://api.magicthegathering.io/v1/cards?contains=imageUrl&pageSize=28&page=${
+        this.state.page
+      }&name=${this.state.term}&colors=${this.state.colors.join('|')}&types=${this.state.types.join(
         '|',
-      )}&types=${this.state.types.join('|')}&rarity=${this.state.rarity.join('|')}&cmc=${this.state
-        .cmc}&gameFormat=${this.state.legality.join('|')}`,
+      )}&rarity=${this.state.rarity.join('|')}&cmc=${
+        this.state.cmc
+      }&gameFormat=${this.state.legality.join('|')}`,
     )
       .then(response => response.json())
       .then((responseJson) => {
@@ -82,6 +115,8 @@ class Filters extends Component {
         responseJson.cards.forEach((e) => {
           m.set(e.name, e);
         });
+        console.log(this.state.cards);
+        console.log(m);
         this.setState({
           cards: new Map(this.state.cards, m),
         });
@@ -154,7 +189,7 @@ class Filters extends Component {
           selection
           options={colors}
           onChange={(e, data) => {
-            this.setState({ colors: data.value }, this.cardSearch);
+            this.setState({ colors: data.value }, this.getCards);
           }}
         />
         <label>Types:</label>
@@ -164,7 +199,7 @@ class Filters extends Component {
           selection
           options={types}
           onChange={(e, data) => {
-            this.setState({ types: data.value }, this.cardSearch);
+            this.setState({ types: data.value }, this.getCards);
           }}
         />
         <label>Rarity:</label>
@@ -174,7 +209,7 @@ class Filters extends Component {
           selection
           options={rarity}
           onChange={(e, data) => {
-            this.setState({ rarity: data.value }, this.cardSearch);
+            this.setState({ rarity: data.value }, this.getCards);
           }}
         />
         <label>Legality:</label>
@@ -184,7 +219,7 @@ class Filters extends Component {
           selection
           options={legality}
           onChange={(e, data) => {
-            this.setState({ legality: data.value }, this.cardSearch);
+            this.setState({ legality: data.value }, this.getCards);
           }}
         />
       </div>

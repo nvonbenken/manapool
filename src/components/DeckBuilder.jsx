@@ -6,6 +6,7 @@ import '../styles/main.css';
 import '../styles/navbar.css';
 import '../styles/deckBuilder.css';
 
+import NavBar from './Navbar';
 import DeckCardList from './DeckCardList';
 import DeckList from './DeckList';
 import DeckStats from './DeckStats';
@@ -92,7 +93,7 @@ class CardLookup extends Component {
     if (!cards) {
       this.setState({ cards: new Map() });
     } else {
-      this.setState({ cards: new Map([...this.state.cards, ...cards]) });
+      this.setState({ cards });
     }
   };
 
@@ -112,67 +113,129 @@ class CardLookup extends Component {
       { menuItem: 'Stats', render: () => <DeckStats deck={this.state.deck} /> },
     ];
 
-    if (!this.state.showTab) {
-      return (
-        <div style={{ display: 'flex', flex: 1 }}>
-          <Filters onSearchComplete={this.searchResults} />
-          <DeckCardList
-            style={{ flexGrow: 1, overflow: 'auto' }}
-            onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
-            addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
-            removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
-            cards={this.state.cards}
-            deck={this.state.deck}
-          />
-          <div style={{ width: '30%', minWidth: '350px' }}>
-            <Tab panes={panes} />
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <div style={{ width: '100%' }}>
-        <Sidebar.Pushable as={Segment} style={{ border: 0, borderRadius: 0 }}>
-          <Sidebar
-            as={Menu}
-            animation="overlay"
-            direction="right"
-            visible={visible}
-            icon="labeled"
-            vertical
-            className="test"
-          >
-            <Button
-              onClick={this.toggleVisibility}
-              style={{
-                left: '-54px',
-                top: '50px',
-                transform: 'rotate(-90deg)',
-                position: 'absolute',
-                borderRadius: '0px',
-              }}
-            >
-              Deck
-            </Button>
-            <Tab panes={panes} />
-          </Sidebar>
-          <Sidebar.Pusher>
-            <div style={{ display: 'flex', flex: 1 }}>
-              <Filters onSearchComplete={this.searchResults} />
-              <DeckCardList
-                style={{ flexGrow: 1, overflow: 'auto' }}
-                onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
-                addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
-                removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
-                cards={this.state.cards}
-                deck={this.state.deck}
-              />
+      <div>
+        <NavBar auth={this.props.auth} />
+        {this.state.showTab ? (
+          <div style={{ width: '100%' }}>
+            <Sidebar.Pushable as={Segment} style={{ border: 0, borderRadius: 0 }}>
+              <Sidebar
+                as={Menu}
+                animation="overlay"
+                direction="right"
+                visible={visible}
+                icon="labeled"
+                vertical
+                className="test"
+              >
+                <Button
+                  onClick={this.toggleVisibility}
+                  style={{
+                    left: '-54px',
+                    top: '50px',
+                    transform: 'rotate(-90deg)',
+                    position: 'absolute',
+                    borderRadius: '0px',
+                  }}
+                >
+                  Deck
+                </Button>
+                <Tab panes={panes} />
+              </Sidebar>
+              <Sidebar.Pusher>
+                <div style={{ display: 'flex', flex: 1 }}>
+                  <Filters onSearchComplete={this.searchResults} />
+                  <DeckCardList
+                    style={{ flexGrow: 1, overflow: 'auto' }}
+                    onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+                    addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+                    removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+                    cards={this.state.cards}
+                    deck={this.state.deck}
+                  />
+                </div>
+              </Sidebar.Pusher>
+            </Sidebar.Pushable>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flex: 1 }}>
+            <Filters onSearchComplete={this.searchResults} />
+            <DeckCardList
+              style={{ flexGrow: 1, overflow: 'auto' }}
+              onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+              addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+              removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+              cards={this.state.cards}
+              deck={this.state.deck}
+            />
+            <div style={{ width: '30%', minWidth: '350px' }}>
+              <Tab panes={panes} />
             </div>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
+          </div>
+        )}
       </div>
     );
+
+    // if (!this.state.showTab) {
+    //   return (
+    //     <div style={{ display: 'flex', flex: 1 }}>
+    //       <Filters onSearchComplete={this.searchResults} />
+    //       <DeckCardList
+    //         style={{ flexGrow: 1, overflow: 'auto' }}
+    //         onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+    //         addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+    //         removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+    //         cards={this.state.cards}
+    //         deck={this.state.deck}
+    //       />
+    //       <div style={{ width: '30%', minWidth: '350px' }}>
+    //         <Tab panes={panes} />
+    //       </div>
+    //     </div>
+    //   );
+    // }
+
+    // return (
+    //   <div style={{ width: '100%' }}>
+    //     <Sidebar.Pushable as={Segment} style={{ border: 0, borderRadius: 0 }}>
+    //       <Sidebar
+    //         as={Menu}
+    //         animation="overlay"
+    //         direction="right"
+    //         visible={visible}
+    //         icon="labeled"
+    //         vertical
+    //         className="test"
+    //       >
+    //         <Button
+    //           onClick={this.toggleVisibility}
+    //           style={{
+    //             left: '-54px',
+    //             top: '50px',
+    //             transform: 'rotate(-90deg)',
+    //             position: 'absolute',
+    //             borderRadius: '0px',
+    //           }}
+    //         >
+    //           Deck
+    //         </Button>
+    //         <Tab panes={panes} />
+    //       </Sidebar>
+    //       <Sidebar.Pusher>
+    //         <div style={{ display: 'flex', flex: 1 }}>
+    //           <Filters onSearchComplete={this.searchResults} />
+    //           <DeckCardList
+    //             style={{ flexGrow: 1, overflow: 'auto' }}
+    //             onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
+    //             addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
+    //             removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
+    //             cards={this.state.cards}
+    //             deck={this.state.deck}
+    //           />
+    //         </div>
+    //       </Sidebar.Pusher>
+    //     </Sidebar.Pushable>
+    //   </div>
   }
 }
 

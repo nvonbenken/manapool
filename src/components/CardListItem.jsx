@@ -2,11 +2,11 @@ import React from 'react';
 import ProgressiveImage from 'react-progressive-image';
 import '../styles/cardList.css';
 
-const CardListItem = ({ card, onCardSelect }) => (
-  <div onClick={event => onCardSelect(card)} className="card">
+const CardListItem = ({ onCardSelect, cardArr }) => (
+  <div onClick={event => onCardSelect(cardArr)} className="card">
     <div>
       <div>
-        <ProgressiveImage src={card.imageUrl} placeholder="../images/card_back-min.jpg">
+        <ProgressiveImage src={cardArr[0].imageUrl} placeholder="../images/card_back-min.jpg">
           {src => (
             <img
               src={src}

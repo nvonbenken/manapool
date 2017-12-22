@@ -4,12 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 
 import 'normalize.css';
 import './styles/index.css';
-import App from './App';
+import Routes from './Routes';
 import registerServiceWorker from './registerServiceWorker';
 
 render(
   <BrowserRouter>
-    <App />
+    <Routes />
   </BrowserRouter>,
   document.getElementById('root'),
 );

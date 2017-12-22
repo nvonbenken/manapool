@@ -17,60 +17,60 @@ const DeckCardList = (props) => {
 
   const d = props.deck ? props.deck : new Map();
 
-  const toPanel = function toPanel(item) {
-    if (d.get(item.name)) {
+  const toPanel = (card) => {
+    if (d.get(card.name)) {
       return {
-        key: item.id,
+        key: card.id,
         title: (
           <div className="deck-list-item">
             <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
-              {item.name}
+              {card.name}
             </div>
-            <div style={{ width: '150px' }}>{item.type}</div>
-            <div style={{ width: '100px' }}>{item.colors ? item.colors.join('/') : ''}</div>
-            <div style={{ width: '50px' }}>{item.cmc}</div>
+            <div style={{ width: '150px' }}>{card.type}</div>
+            <div style={{ width: '100px' }}>{card.colors ? card.colors.join('/') : ''}</div>
+            <div style={{ width: '50px' }}>{card.cmc}</div>
             <div>
               <Button.Group icon>
-                <Button onClick={event => handleAddCard(event, item)}>
+                <Button onClick={event => handleAddCard(event, card)}>
                   <Icon name="plus" />
                 </Button>
-                <Button onClick={event => handleRemoveCard(event, item)}>
+                <Button onClick={event => handleRemoveCard(event, card)}>
                   <Icon name="minus" />
                 </Button>
               </Button.Group>
             </div>
           </div>
         ),
-        content: <DeckSelectedCard card={item} />,
+        content: <DeckSelectedCard card={card} />,
       };
     }
     return {
-      key: item.id,
+      key: card.id,
       title: (
         <div className="deck-list-item">
           <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
-            {item.name}
+            {card.name}
           </div>
-          <div style={{ width: '150px' }}>{item.type}</div>
-          <div style={{ width: '100px' }}>{item.colors ? item.colors.join('/') : ''}</div>
-          <div style={{ width: '50px' }}>{item.cmc}</div>
+          <div style={{ width: '150px' }}>{card.type}</div>
+          <div style={{ width: '100px' }}>{card.colors ? card.colors.join('/') : ''}</div>
+          <div style={{ width: '50px' }}>{card.cmc}</div>
           <div>
             <Button.Group icon>
-              <Button onClick={event => handleAddCard(event, item)}>
+              <Button onClick={event => handleAddCard(event, card)}>
                 <Icon name="plus" />
               </Button>
-              <Button disabled onClick={event => handleRemoveCard(event, item)}>
+              <Button disabled onClick={event => handleRemoveCard(event, card)}>
                 <Icon name="minus" />
               </Button>
             </Button.Group>
           </div>
         </div>
       ),
-      content: <DeckSelectedCard card={item} />,
+      content: <DeckSelectedCard card={card} />,
     };
   };
 
-  const cardItems = Array.from(props.cards.values()).map(toPanel);
+  const cardItems = Array.from(props.cards.values()).map(cards => toPanel(cards[0]));
 
   if (!cardItems || cardItems.length === 0) {
     return (
