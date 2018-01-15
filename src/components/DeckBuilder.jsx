@@ -109,8 +109,14 @@ class CardLookup extends Component {
     const visible = this.state.deckListVisible;
 
     const panes = [
-      { menuItem: 'Deck', render: () => <DeckList deck={this.state.deck} /> },
-      { menuItem: 'Stats', render: () => <DeckStats deck={this.state.deck} /> },
+      {
+        menuItem: 'Deck',
+        render: () => <DeckList deck={this.state.deck} auth={this.props.auth} />,
+      },
+      {
+        menuItem: 'Stats',
+        render: () => <DeckStats deck={this.state.deck} auth={this.props.auth} />,
+      },
     ];
 
     return (
@@ -175,67 +181,6 @@ class CardLookup extends Component {
         )}
       </div>
     );
-
-    // if (!this.state.showTab) {
-    //   return (
-    //     <div style={{ display: 'flex', flex: 1 }}>
-    //       <Filters onSearchComplete={this.searchResults} />
-    //       <DeckCardList
-    //         style={{ flexGrow: 1, overflow: 'auto' }}
-    //         onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
-    //         addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
-    //         removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
-    //         cards={this.state.cards}
-    //         deck={this.state.deck}
-    //       />
-    //       <div style={{ width: '30%', minWidth: '350px' }}>
-    //         <Tab panes={panes} />
-    //       </div>
-    //     </div>
-    //   );
-    // }
-
-    // return (
-    //   <div style={{ width: '100%' }}>
-    //     <Sidebar.Pushable as={Segment} style={{ border: 0, borderRadius: 0 }}>
-    //       <Sidebar
-    //         as={Menu}
-    //         animation="overlay"
-    //         direction="right"
-    //         visible={visible}
-    //         icon="labeled"
-    //         vertical
-    //         className="test"
-    //       >
-    //         <Button
-    //           onClick={this.toggleVisibility}
-    //           style={{
-    //             left: '-54px',
-    //             top: '50px',
-    //             transform: 'rotate(-90deg)',
-    //             position: 'absolute',
-    //             borderRadius: '0px',
-    //           }}
-    //         >
-    //           Deck
-    //         </Button>
-    //         <Tab panes={panes} />
-    //       </Sidebar>
-    //       <Sidebar.Pusher>
-    //         <div style={{ display: 'flex', flex: 1 }}>
-    //           <Filters onSearchComplete={this.searchResults} />
-    //           <DeckCardList
-    //             style={{ flexGrow: 1, overflow: 'auto' }}
-    //             onCardSelect={selectedCard => this.handleSelectCard(selectedCard)}
-    //             addCard={(selectedCard, quantity) => this.handleAddCard(selectedCard, quantity)}
-    //             removeCard={selectedCard => this.handleRemoveCard(selectedCard)}
-    //             cards={this.state.cards}
-    //             deck={this.state.deck}
-    //           />
-    //         </div>
-    //       </Sidebar.Pusher>
-    //     </Sidebar.Pushable>
-    //   </div>
   }
 }
 

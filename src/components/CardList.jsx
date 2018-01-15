@@ -8,9 +8,6 @@ const CardList = (props) => {
   const cardItems = Array.from(props.cards.values()).map(card => (
     <CardListItem onCardSelect={props.onCardSelect} key={card[0].id} cardArr={card} />
   ));
-  // const cardItems = Array.from(props.cards.values()).map(card => (
-  //   <CardListItem onCardSelect={props.onCardSelect} key={card.id} card={card} />
-  // ));
 
   if (!cardItems || cardItems.length === 0) {
     return (

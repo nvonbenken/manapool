@@ -18,7 +18,7 @@ export default class Auth {
     redirectUri: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/callback' : '',
     audience: 'https://manapool.auth0.com/userinfo',
     responseType: 'token id_token',
-    scope: 'openid profile',
+    scope: 'openid profile app_metadata user_metadata',
   });
 
   userProfile;

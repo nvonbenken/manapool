@@ -21,7 +21,35 @@ const DeckCardList = (props) => {
     if (d.get(card.name)) {
       return {
         key: card.id,
-        title: (
+        title: {
+          content: (
+            <div className="deck-list-item">
+              <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
+                {card.name}
+              </div>
+              <div style={{ width: '150px' }}>{card.type}</div>
+              <div style={{ width: '100px' }}>{card.colors ? card.colors.join('/') : ''}</div>
+              <div style={{ width: '50px' }}>{card.cmc}</div>
+              <div>
+                <Button.Group icon>
+                  <Button onClick={event => handleAddCard(event, card)}>
+                    <Icon name="plus" />
+                  </Button>
+                  <Button onClick={event => handleRemoveCard(event, card)}>
+                    <Icon name="minus" />
+                  </Button>
+                </Button.Group>
+              </div>
+            </div>
+          ),
+        },
+        content: { content: <DeckSelectedCard card={card} /> },
+      };
+    }
+    return {
+      key: card.id,
+      title: {
+        content: (
           <div className="deck-list-item">
             <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
               {card.name}
@@ -34,39 +62,15 @@ const DeckCardList = (props) => {
                 <Button onClick={event => handleAddCard(event, card)}>
                   <Icon name="plus" />
                 </Button>
-                <Button onClick={event => handleRemoveCard(event, card)}>
+                <Button disabled onClick={event => handleRemoveCard(event, card)}>
                   <Icon name="minus" />
                 </Button>
               </Button.Group>
             </div>
           </div>
         ),
-        content: <DeckSelectedCard card={card} />,
-      };
-    }
-    return {
-      key: card.id,
-      title: (
-        <div className="deck-list-item">
-          <div className="deck-list-item-name" style={{ maxWidth: 'calc(100vw - 1500px)' }}>
-            {card.name}
-          </div>
-          <div style={{ width: '150px' }}>{card.type}</div>
-          <div style={{ width: '100px' }}>{card.colors ? card.colors.join('/') : ''}</div>
-          <div style={{ width: '50px' }}>{card.cmc}</div>
-          <div>
-            <Button.Group icon>
-              <Button onClick={event => handleAddCard(event, card)}>
-                <Icon name="plus" />
-              </Button>
-              <Button disabled onClick={event => handleRemoveCard(event, card)}>
-                <Icon name="minus" />
-              </Button>
-            </Button.Group>
-          </div>
-        </div>
-      ),
-      content: <DeckSelectedCard card={card} />,
+      },
+      content: { content: <DeckSelectedCard card={card} /> },
     };
   };
 
