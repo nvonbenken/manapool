@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Input } from 'semantic-ui-react';
 
 import NavBar from './Navbar';
 import '../styles/home.css';
@@ -14,10 +14,12 @@ class Profile extends Component {
   }
 
   componentWillMount() {
-    this.setState({ profile: {} });
     const { userProfile, getProfile } = this.props.auth;
     if (!userProfile) {
       getProfile((err, profile) => {
+        if (!profile) {
+          window.location.href = window.location.origin;
+        }
         this.setState({ profile });
       });
     } else {
@@ -30,16 +32,20 @@ class Profile extends Component {
       <div>
         <NavBar auth={this.props.auth} />
         <div className="container">
-          <div className="profile-area">
-            <h1>{this.state.profile.name}</h1>
-            <div header="Profile">
-              <img src={this.state.profile.picture} alt="profile" />
-              <div>
-                <Icon glyph="user" /> Nickname
-                <h3>{this.state.profile.nickname}</h3>
-              </div>
-              <pre>{JSON.stringify(this.state.profile, null, 2)}</pre>
-            </div>
+          <img src={this.state.profile.picture} alt="profile" />
+          <div>
+            <Icon name="user" /> {this.state.profile.nickname}
+          </div>
+          <pre>{JSON.stringify(this.state.profile, null, 2)}</pre>
+          <div>
+            <label>Username:</label>
+            <Input
+              action={{ content: 'Edit', onClick: () => console.log('test') }}
+              placeholder={this.state.profile.username}
+            />
+          </div>
+          <div>
+            <h3>Saved Decks</h3>
           </div>
         </div>
       </div>

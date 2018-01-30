@@ -55,9 +55,15 @@ const DeckList = ({ deck, auth }) => {
       content: {
         content: (
           <div>
-            <div>{item.card.type}</div>
-            <div>{item.card.colors ? item.card.colors.join('/') : ''}</div>
-            <div>{item.card.manaCost}</div>
+            <div>
+              <b>Type:</b> {item.card.type}
+            </div>
+            <div>
+              <b>Color:</b> {item.card.colors ? item.card.colors.join('/') : ''}
+            </div>
+            <div>
+              <b>Cost:</b> {item.card.manaCost}
+            </div>
           </div>
         ),
       },
