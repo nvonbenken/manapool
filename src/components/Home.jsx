@@ -16,7 +16,11 @@ const Home = props => (
       </p>
       <p>
         In the future I plan to expand the filters and statistics further, while making the site
-        more useful for you! If you have any suggestions or discover a bug, please tell me about it{' '}
+        more useful for you! I'm also planning to get a more funtional mobile version of the site
+        completed soon, so look out for that.
+      </p>
+      <p>
+        If you have any suggestions or discover a bug, please tell me about it{' '}
         <a href="https://bitbucket.org/nvonbenken/manapool/issues/new">here.</a>
       </p>
     </div>
