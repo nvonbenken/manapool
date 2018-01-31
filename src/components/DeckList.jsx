@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button } from 'semantic-ui-react';
+import { Accordion, Popup, Button } from 'semantic-ui-react';
 
 import '../styles/deckBuilder.css';
 
@@ -9,8 +9,8 @@ const DeckList = ({ deck, auth }) => {
       <div style={{ flexGrow: 1, padding: '10px' }}>
         {auth.isAuthenticated() ? (
           <div>
-            <Button>Import</Button> <Button>Load</Button> <Button disabled>Export</Button>{' '}
-            <Button disabled>Save</Button>
+            <Button disabled>Import</Button> <Button disabled>Load</Button>{' '}
+            <Button disabled>Export</Button> <Button disabled>Save</Button>
           </div>
         ) : (
           <p>Please log in to import/export/save decks.</p>
