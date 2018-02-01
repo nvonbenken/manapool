@@ -1,8 +1,11 @@
 import React from 'react';
 import NavBar from './Navbar';
+import Footer from './Footer';
+
+import '../styles/main.css';
 
 const About = props => (
-  <div>
+  <div className="wrapper">
     <NavBar auth={props.auth} />
     <div className="container">
       <h1>Hello World!</h1>
@@ -16,6 +19,7 @@ const About = props => (
         <a href="tcgplayer.com">TCGPlayer</a>.
       </p>
     </div>
+    <Footer />
   </div>
 );
 

@@ -11,8 +11,6 @@ import DeckBuilder from './components/DeckBuilder';
 import About from './components/About';
 import Profile from './components/Profile';
 
-import './styles/main.css';
-
 const auth = new Auth();
 
 const handleAuthentication = (nextState, replace) => {

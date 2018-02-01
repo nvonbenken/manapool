@@ -64,7 +64,6 @@ class NavBar extends Component {
         ) : (
           <Menu.Item name="Login" onClick={this.login} />
         )}
-        <Menu.Item name="About" onClick={this.handleItemClick} as={Link} to="/about" />
       </Menu>
     );
   }

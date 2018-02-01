@@ -3,8 +3,10 @@
 .home-container {
   font-size: 18px;
   color: $mine-shaft;
+  height: 100%;
   max-width: 740px;
   line-height: 1.6;
   text-align: center;
   margin: 10px auto;
+  flex: 1;
 }

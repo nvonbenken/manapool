@@ -5,6 +5,9 @@ import NavBar from './Navbar';
 import CardList from './CardList';
 import CardDetail from './CardDetail';
 import Filters from './Filters';
+import Footer from './Footer';
+
+import '../styles/main.css';
 
 class CardLookup extends Component {
   constructor(props) {
@@ -56,9 +59,9 @@ class CardLookup extends Component {
 
   render() {
     return (
-      <div>
+      <div className="wrapper">
         <NavBar auth={this.props.auth} />
-        <div style={{ display: 'flex', flex: 1 }}>
+        <div style={{ flex: 1 }}>
           <Filters onSearchComplete={this.searchResults} />
           <CardList
             onCardSelect={selectedCard => this.handleOpenModal(selectedCard)}
@@ -74,6 +77,7 @@ class CardLookup extends Component {
             </Modal.Content>
           </Modal>
         </div>
+        <Footer />
       </div>
     );
   }

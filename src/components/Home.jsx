@@ -1,10 +1,12 @@
 import React from 'react';
 
 import NavBar from './Navbar';
+import Footer from './Footer';
 import '../styles/home.css';
+import '../styles/main.css';
 
 const Home = props => (
-  <div>
+  <div className="wrapper">
     <NavBar auth={props.auth} />
     <div className="home-container">
       <h1>Welcome to ManaPool!</h1>
@@ -24,6 +26,7 @@ const Home = props => (
         <a href="https://bitbucket.org/nvonbenken/manapool/issues/new">here.</a>
       </p>
     </div>
+    <Footer />
   </div>
 );
 

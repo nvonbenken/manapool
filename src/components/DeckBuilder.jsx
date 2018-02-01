@@ -11,6 +11,7 @@ import DeckCardList from './DeckCardList';
 import DeckList from './DeckList';
 import DeckStats from './DeckStats';
 import Filters from './Filters';
+import Footer from './Footer';
 
 function CreateCard(card, quantity) {
   this.card = card;
@@ -120,7 +121,7 @@ class CardLookup extends Component {
     ];
 
     return (
-      <div>
+      <div className="wrapper">
         <NavBar auth={this.props.auth} />
         {this.state.showTab ? (
           <div style={{ width: '100%' }}>
@@ -179,6 +180,7 @@ class CardLookup extends Component {
             </div>
           </div>
         )}
+        <Footer />
       </div>
     );
   }

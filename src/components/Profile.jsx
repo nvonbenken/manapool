@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Input } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import NavBar from './Navbar';
 import '../styles/home.css';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Popup, Button } from 'semantic-ui-react';
+import { Accordion, Button } from 'semantic-ui-react';
 
 import '../styles/deckBuilder.css';
 

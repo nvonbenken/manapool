@@ -1,18 +1,17 @@
 @import "colors";
 
-.main {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  min-height: calc(100vh - 86px);
-  display: flex;
-  justify-content: center;
-}
-
 .container {
   font-size: 18px;
   color: $mine-shaft;
-  // width: 700px;
+  height: 100%;
   line-height: 1.6;
   text-align: center;
   margin-top: 10px;
+  flex: 1;
+}
+
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
