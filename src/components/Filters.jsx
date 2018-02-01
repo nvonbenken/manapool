@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { Input, Dropdown } from 'semantic-ui-react';
+import { Input, Dropdown, Menu } from 'semantic-ui-react';
 import mtg from 'mtgsdk';
+
+import logo from '../images/logo.svg';
 
 import '../styles/filters.css';
 
@@ -42,33 +44,6 @@ class Filters extends Component {
     this.setState({ cmc }, _.debounce(this.getCards, 300));
   };
 
-  handleScroll = () => {
-    const body = document.body;
-    const html = document.documentElement;
-    const docHeight = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight,
-    );
-
-    const pixelsFromWindowBottomToBottom = 0 + docHeight - window.scrollY - window.innerHeight;
-
-    if (pixelsFromWindowBottomToBottom < 200) {
-      this.setState({ page: this.state.page + 1 });
-      this.setState({
-        cards: new Map(this.state.cards, this.getCards()),
-      });
-    }
-  };
-
-  resetSearch = () => {
-    this.setState({ page: 1 });
-    this.setState({ cards: new Map() });
-    this.props.onSearchComplete('');
-  };
-
   getCards = () => {
     mtg.card
       .where({
@@ -97,6 +72,33 @@ class Filters extends Component {
         this.setState({ cards: map });
         this.props.onSearchComplete(map);
       });
+  };
+
+  resetSearch = () => {
+    this.setState({ page: 1 });
+    this.setState({ cards: new Map() });
+    this.props.onSearchComplete('');
+  };
+
+  handleScroll = () => {
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight,
+    );
+
+    const pixelsFromWindowBottomToBottom = 0 + docHeight - window.scrollY - window.innerHeight;
+
+    if (pixelsFromWindowBottomToBottom < 200) {
+      this.setState({ page: this.state.page + 1 });
+      this.setState({
+        cards: new Map(this.state.cards, this.getCards()),
+      });
+    }
   };
 
   cardSearch = () => {
@@ -166,7 +168,13 @@ class Filters extends Component {
     ];
 
     return (
-      <div className="filters">
+      <Menu as={Menu} borderless visible vertical inverted className="filters">
+        <div
+          style={{ display: 'flex', fontWeight: 700, alignItems: 'center', paddingBottom: '15px' }}
+        >
+          <img className="ui image" src={logo} alt="" style={{ height: '20px', margin: '5px' }} />
+          ManaPool
+        </div>
         <label>Name:</label>
         <Input
           icon="search"
@@ -222,7 +230,7 @@ class Filters extends Component {
             this.setState({ legality: data.value }, this.getCards);
           }}
         />
-      </div>
+      </Menu>
     );
   }
 }

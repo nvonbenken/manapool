@@ -1,12 +1,16 @@
 @import "colors";
 
 .filters {
-  width: 235px;
+  width: 235px !important;
   height: 100vh;
   padding: 10px;
   background: $shark;
   color: #ffffff;
   position: fixed;
+  border-radius: 0px !important;
+  overflow-y: auto;
+  top: 0px;
+  bottom: 0px;
 }
 
 div.ui.icon.input {
