@@ -101,8 +101,8 @@ class Home extends Component {
                       <Item.Header>{article.title}</Item.Header>
                       <Item.Meta>{article['rss:pubdatestring']['#']}</Item.Meta>
                       {/<p>/.test(article.description) ? (
-                        <Item.Description>
-                          {/<p>(.*)<\/p>/.exec(article.description)[1]}
+                        <Item.Description id={article.title}>
+                          {/<p>(.*)<\/p>/.exec(article.description)[1].replace(/(<([^>]+)>)/gi, '')}
                         </Item.Description>
                       ) : null}
                     </Item.Content>
