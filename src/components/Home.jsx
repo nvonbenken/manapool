@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Item, Image } from 'semantic-ui-react';
+import { Item, Loader } from 'semantic-ui-react';
 
 import NavBar from './Navbar';
 import Footer from './Footer';
