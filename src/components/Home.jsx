@@ -50,17 +50,11 @@ class Home extends Component {
 
     parser.on('readable', () => {
       let item = parser.read();
-      const meta = parser.meta; // get the metadata of the feed
-      while (item) {
-        if (articles.count === 10) {
-          break;
-        }
-        // do whatever you want with the item
+      while (item && articles.length < 3) {
         articles.push(item);
-        // get the next item, if none, then item will be null next time
         item = parser.read();
       }
-      this.setState({ articles: articles.slice(0, 3) });
+      this.setState({ articles });
     });
   };
 
@@ -87,12 +81,12 @@ class Home extends Component {
           </p>
           <h2>Recent Acticles</h2>
           <div style={{ textAlign: 'left', padding: '10px' }}>
-            {!this.state.articles || this.state.articles.count === 0 ? (
-              <div>No articles found</div>
+            {!this.state.articles || this.state.articles.length === 0 ? (
+              <Loader active inline="centered" />
             ) : (
               <Item.Group divided>
                 {this.state.articles.map(article => (
-                  <Item href={article.link}>
+                  <Item href={article.link} key={article.title}>
                     <Item.Image
                       src={/<img[^>]*src="([^"]*)"/.exec(article.description)[1]}
                       size="small"
