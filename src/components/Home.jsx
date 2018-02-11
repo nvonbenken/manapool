@@ -45,7 +45,7 @@ class Home extends Component {
     });
 
     parser.on('end', () => {
-      // handle that we've finished reading articles
+      this.setState({ articles });
     });
 
     parser.on('readable', () => {
@@ -54,7 +54,6 @@ class Home extends Component {
         articles.push(item);
         item = parser.read();
       }
-      this.setState({ articles });
     });
   };
 
