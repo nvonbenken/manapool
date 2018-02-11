@@ -6,7 +6,7 @@ import Footer from './Footer';
 import '../styles/home.css';
 import '../styles/main.css';
 
-class Home extends Component {
+class Home extends React.PureComponent {
   constructor(props) {
     super(props);
 
