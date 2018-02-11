@@ -20,7 +20,6 @@ class Filters extends Component {
       rarity: [],
       legality: [],
       page: 1,
-      visible: true,
     };
 
     this.handleScroll = this.handleScroll.bind(this, this.state.page, this.state.cards);
@@ -102,23 +101,17 @@ class Filters extends Component {
   };
 
   cardSearch = () => {
-    fetch(
-      `https://api.magicthegathering.io/v1/cards?contains=imageUrl&pageSize=28&page=${
-        this.state.page
-      }&name=${this.state.term}&colors=${this.state.colors.join('|')}&types=${this.state.types.join(
-        '|',
-      )}&rarity=${this.state.rarity.join('|')}&cmc=${
-        this.state.cmc
-      }&gameFormat=${this.state.legality.join('|')}`,
-    )
+    fetch(`https://api.magicthegathering.io/v1/cards?contains=imageUrl&pageSize=28&page=${
+      this.state.page
+    }&name=${this.state.term}&colors=${this.state.colors.join('|')}&types=${this.state.types.join('|')}&rarity=${this.state.rarity.join('|')}&cmc=${
+      this.state.cmc
+    }&gameFormat=${this.state.legality.join('|')}`)
       .then(response => response.json())
       .then((responseJson) => {
         const m = new Map();
         responseJson.cards.forEach((e) => {
           m.set(e.name, e);
         });
-        console.log(this.state.cards);
-        console.log(m);
         this.setState({
           cards: new Map(this.state.cards, m),
         });
@@ -170,7 +163,9 @@ class Filters extends Component {
     return (
       <Menu as={Menu} borderless visible vertical inverted className="filters">
         <div
-          style={{ display: 'flex', fontWeight: 700, alignItems: 'center', paddingBottom: '15px' }}
+          style={{
+ display: 'flex', fontWeight: 700, alignItems: 'center', paddingBottom: '15px',
+}}
         >
           <img className="ui image" src={logo} alt="" style={{ height: '20px', margin: '5px' }} />
           ManaPool
