@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Item, Loader } from 'semantic-ui-react';
 
 import NavBar from './Navbar';
@@ -32,12 +32,10 @@ class Home extends React.PureComponent {
     });
 
     req.on('response', (res) => {
-      // check if status code is not correct
       if (res.statusCode !== 200) {
         return req.emit('error', new Error('Bad status code'));
       }
-      // if the res is correct, when can pipe the response
-      req.pipe(parser); // pipe response to feedparser
+      req.pipe(parser);
     });
 
     parser.on('error', (err) => {

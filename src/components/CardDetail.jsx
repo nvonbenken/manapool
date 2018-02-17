@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Divider, Button } from 'semantic-ui-react';
+import { Table, Divider, Button, Loader } from 'semantic-ui-react';
 
 import '../styles/cardDetail.css';
 
@@ -73,8 +73,10 @@ class CardDetail extends Component {
   handleClick = (event, type) => {
     if (type === 'add' && this.state.page < this.props.cardArr.length - 1) {
       this.setState({ page: this.state.page + 1 });
+      this.setState({ loading: true });
     } else if (type === 'subtract' && this.state.page > 0) {
       this.setState({ page: this.state.page - 1 });
+      this.setState({ loading: true });
     }
   };
 
@@ -196,14 +198,18 @@ class CardDetail extends Component {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.Cell>Loading</Table.Cell>
+              <Table.Cell>
+                <Loader active inverted inline="centered">
+                  Loading
+                </Loader>
+              </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
       );
     } else {
       cost = (
-        <div>
+        <div style={{ width: '180px' }}>
           <Table celled>
             <Table.Header>
               <Table.Row>
@@ -232,7 +238,7 @@ class CardDetail extends Component {
             </Table.Body>
           </Table>
           <div>
-            All prices are provided by <a href="www.tcgplayer.com">TCGPlayer</a>
+            Prices provided by <a href="www.tcgplayer.com">TCGPlayer</a>
           </div>
         </div>
       );
@@ -334,10 +340,8 @@ class CardDetail extends Component {
         <div>
           <div style={{ display: 'flex' }}>
             <div style={{ paddingRight: '10px' }}>{legalities}</div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div>{rulings}</div>
-              <div style={{ paddingTop: '10px' }}>{cost}</div>
-            </div>
+            <div style={{ paddingRight: '10px' }}>{rulings}</div>
+            <div style={{ paddingRight: '10px', width: '180px' }}>{cost}</div>
           </div>
         </div>
       </div>
