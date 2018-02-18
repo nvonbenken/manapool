@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Divider, Button, Icon } from "semantic-ui-react";
+import { Table, Divider, Button, Icon, Popup } from "semantic-ui-react";
 
 import "../styles/cardDetail.css";
 
@@ -10,7 +10,8 @@ class CardDetail extends Component {
     this.state = {
       cost: null,
       page: 0,
-      loading: true
+      loading: true,
+      favorite: false
     };
   }
 
@@ -84,6 +85,11 @@ class CardDetail extends Component {
     } else if (type === "previous") {
       this.setState({ page: this.state.page - 1 });
     }
+  };
+
+  setFavorite = () => {
+    console.log(this.props.cardArr[this.state.page]);
+    this.setState({ favorite: !this.state.favorite });
   };
 
   render() {
@@ -370,6 +376,32 @@ class CardDetail extends Component {
               </Button>
             )
           ) : null}
+        </div>
+        <div>
+          <span>Card Actions:</span>
+          {this.state.favorite ? (
+            <Popup
+              trigger={
+                <Icon
+                  name="star"
+                  className="icon-favorite"
+                  onClick={() => this.setFavorite()}
+                />
+              }
+              content="Remove card from favorites."
+            />
+          ) : (
+            <Popup
+              trigger={
+                <Icon
+                  name="star empty"
+                  className="icon-favorite"
+                  onClick={() => this.setFavorite()}
+                />
+              }
+              content="Add card to favorites."
+            />
+          )}
         </div>
         <Divider />
         <div>
