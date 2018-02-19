@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { Modal } from 'semantic-ui-react';
+import React, { Component } from "react";
+import { Modal } from "semantic-ui-react";
 
-import NavBar from './Navbar';
-import CardList from './CardList';
-import CardDetail from './CardDetail';
-import Filters from './Filters';
-import Footer from './Footer';
+import NavBar from "./Navbar";
+import CardList from "./CardList";
+import CardDetail from "./CardDetail";
+import Filters from "./Filters";
+import Footer from "./Footer";
+import { GetAccessToken } from "../api/tcgPlayer.js";
 
-import '../styles/main.css';
+import "../styles/main.css";
 
 class CardLookup extends Component {
   constructor(props) {
@@ -17,30 +18,33 @@ class CardLookup extends Component {
       cards: new Map(),
       selectedCard: null,
       showModal: false,
-      tcgAccessToken: null,
+      tcgAccessToken: null
     };
 
     this.getAccessToken();
   }
 
   getAccessToken = () => {
-    fetch('https://cors-anywhere.herokuapp.com/https://api.tcgplayer.com/token', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'cache-control': 'no-cache',
-      },
-      method: 'POST',
-      body:
-        'grant_type=client_credentials&client_id=0A436DDE-5EB7-4B14-881B-3971A625B541&client_secret=62EF4907-FD23-445A-A586-0581DDBE4CB3',
-    })
+    fetch(
+      "https://cors-anywhere.herokuapp.com/https://api.tcgplayer.com/token",
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "cache-control": "no-cache"
+        },
+        method: "POST",
+        body:
+          "grant_type=client_credentials&client_id=0A436DDE-5EB7-4B14-881B-3971A625B541&client_secret=62EF4907-FD23-445A-A586-0581DDBE4CB3"
+      }
+    )
       .then(response => response.json())
-      .then((responseJson) => {
+      .then(responseJson => {
         this.setState({ tcgAccessToken: responseJson.access_token });
       });
   };
 
-  handleOpenModal = (selectedCard) => {
+  handleOpenModal = selectedCard => {
     this.setState({ selectedCard });
     this.setState({ showModal: true });
   };
@@ -49,7 +53,7 @@ class CardLookup extends Component {
     this.setState({ showModal: false });
   };
 
-  searchResults = (cards) => {
+  searchResults = cards => {
     if (!cards) {
       this.setState({ cards: new Map() });
     } else {
@@ -58,6 +62,7 @@ class CardLookup extends Component {
   };
 
   render() {
+    GetAccessToken().then(response => console.log(response));
     return (
       <div className="wrapper">
         <NavBar auth={this.props.auth} />
@@ -67,7 +72,11 @@ class CardLookup extends Component {
             onCardSelect={selectedCard => this.handleOpenModal(selectedCard)}
             cards={this.state.cards}
           />
-          <Modal open={this.state.showModal} onClose={this.handleCloseModal} closeIcon>
+          <Modal
+            open={this.state.showModal}
+            onClose={this.handleCloseModal}
+            closeIcon
+          >
             <Modal.Header>Card Details</Modal.Header>
             <Modal.Content>
               <CardDetail
