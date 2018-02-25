@@ -1,6 +1,6 @@
-import auth0 from 'auth0-js';
+import auth0 from "auth0-js";
 
-import history from './history';
+import history from "./history";
 
 export default class Auth {
   constructor() {
@@ -11,14 +11,16 @@ export default class Auth {
     this.getProfile = this.getProfile.bind(this);
   }
 
-  // Please use your own credentials here
   auth0 = new auth0.WebAuth({
-    domain: 'manapool.auth0.com',
-    clientID: 'k2ESU1CaH-HUgYjzEv43MEBHHJcc2_lv',
-    redirectUri: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/callback' : '',
-    audience: 'https://manapool.auth0.com/userinfo',
-    responseType: 'token id_token',
-    scope: 'openid profile app_metadata user_metadata',
+    domain: "manapool.auth0.com",
+    clientID: "k2ESU1CaH-HUgYjzEv43MEBHHJcc2_lv",
+    redirectUri:
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/callback"
+        : "https://manapool.org/callback",
+    audience: "https://manapool.auth0.com/userinfo",
+    responseType: "token id_token",
+    scope: "openid profile app_metadata user_metadata"
   });
 
   userProfile;
@@ -27,52 +29,44 @@ export default class Auth {
     this.auth0.authorize();
   };
 
-  // removes user details from localStorage
   logout = () => {
-    // Clear access token and ID token from local storage
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
-    // navigate to the home route
-    history.replace('/home');
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("id_token");
+    localStorage.removeItem("expires_at");
+    history.replace("/home");
   };
 
-  // parses the result after authentication from URL hash
   handleAuthentication = () => {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        history.replace('/home');
+        history.replace("/home");
       } else if (err) {
-        history.replace('/home');
+        history.replace("/home");
         console.log(err);
       }
     });
   };
 
-  // Sets user details in localStorage
-  setSession = (authResult) => {
-    // Set the time that the access token will expire at
-    const expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
-    // navigate to the home route
-    history.replace('/home');
+  setSession = authResult => {
+    const expiresAt = JSON.stringify(
+      authResult.expiresIn * 1000 + new Date().getTime()
+    );
+    localStorage.setItem("access_token", authResult.accessToken);
+    localStorage.setItem("id_token", authResult.idToken);
+    localStorage.setItem("expires_at", expiresAt);
+    history.replace("/home");
   };
 
-  // checks if the user is authenticated
   isAuthenticated = () => {
-    // Check whether the current time is past the
-    // access token's expiry time
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
     return new Date().getTime() < expiresAt;
   };
 
   getAccessToken = () => {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
-      throw new Error('No access token found');
+      throw new Error("No access token found");
     }
     return accessToken;
   };
@@ -81,6 +75,12 @@ export default class Auth {
     const accessToken = this.getAccessToken();
     this.auth0.client.userInfo(accessToken, (err, profile) => {
       if (profile) {
+        profile.user_metadata = profile.user_metadata || {};
+        profile.user_metadata.displayName =
+          profile.user_metadata.displayName || profile.nickname;
+        profile.user_metadata.favorites = profile.user_metadata.favorites || {};
+        profile.user_metadata.savedDecks =
+          profile.user_metadata.savedDecks || {};
         this.userProfile = profile;
       }
       cb(err, profile);
