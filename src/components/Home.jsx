@@ -21,14 +21,12 @@ class Home extends React.PureComponent {
     const FeedParser = require('feedparser');
     const request = require('request');
 
-    const req = request(
-      'https://cors-anywhere.herokuapp.com/https://magic.wizards.com/en/rss/rss.xml?tags=Daily%20MTG&lang=en',
-    );
+    const req = request('https://cors-anywhere.herokuapp.com/https://magic.wizards.com/en/rss/rss.xml?tags=Daily%20MTG&lang=en');
     const parser = new FeedParser();
     const articles = [];
 
     req.on('error', (err) => {
-      // handle request error
+      console.warn(err);
     });
 
     req.on('response', (res) => {
@@ -39,7 +37,7 @@ class Home extends React.PureComponent {
     });
 
     parser.on('error', (err) => {
-      // handle parser error
+      console.warn(err);
     });
 
     parser.on('end', () => {
