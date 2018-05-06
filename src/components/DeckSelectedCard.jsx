@@ -37,7 +37,9 @@ class DeckSelectedCard extends Component {
           <div className="image-container">
             <img src={card.imageUrl} alt="" />
             <a
-              href={`http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=${card.multiverseid}`}
+              href={`http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=${
+                card.multiverseid
+              }`}
             >
               View on Wizards.com
             </a>

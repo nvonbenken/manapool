@@ -26,8 +26,6 @@ class CardLookup extends Component {
       cards: new Map(),
       deck: new Map(),
       selectedCard: [],
-      addedCard: undefined,
-      quantity: 1,
       deckListVisible: false,
       showTab: false,
     };

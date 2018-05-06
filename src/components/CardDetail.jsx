@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Divider, Button, Icon, Popup } from 'semantic-ui-react';
 import { GetProductIds, GetProductMarketPrice } from '../api/tcgPlayer';
+import { SetFavoriteCard, RemoveFavoriteCard } from '../api/auth0';
 
 import '../styles/cardDetail.css';
 
@@ -16,14 +17,25 @@ class CardDetail extends Component {
     };
   }
 
-  setFavorite = () => {
-    console.log(this.props.cardArr[this.state.page]);
-    this.setState({ favorite: !this.state.favorite });
+  componentWillMount() {
+    this.setState({ favorite: this.checkFavorite(this.props.cardArr[this.state.page].id) });
+  }
+
+  addRemoveFavorite = (cardId, action) => {
+    if (action === 'add') {
+      SetFavoriteCard(cardId, this.props.auth);
+      this.setState({ favorite: true });
+    } else {
+      RemoveFavoriteCard(cardId, this.props.auth);
+      this.setState({ favorite: false });
+    }
   };
 
+  checkFavorite = cardId =>
+    this.props.auth.userProfile.user_metadata.favorite_cards.includes(cardId);
+
   handleClick = (event, type) => {
-    this.setState({ loading: true });
-    this.setState({ cost: null });
+    this.setState({ loading: true, cost: null });
     if (type === 'next') {
       this.setState({ page: this.state.page + 1 });
     } else if (type === 'previous') {
@@ -195,8 +207,7 @@ class CardDetail extends Component {
       GetProductIds(this.props.accessToken, this.props.cardArr[this.state.page]).then((results) => {
         if (results.totalItems > 0) {
           GetProductMarketPrice(this.props.accessToken, results.results).then((cost) => {
-            this.setState({ cost });
-            this.setState({ loading: false });
+            this.setState({ cost, loading: false });
           });
         } else {
           this.setState({ loading: false });
@@ -313,7 +324,13 @@ class CardDetail extends Component {
           {this.state.favorite ? (
             <Popup
               trigger={
-                <Icon name="star" className="icon-favorite" onClick={() => this.setFavorite()} />
+                <Icon
+                  name="star"
+                  className="icon-favorite"
+                  onClick={() =>
+                    this.addRemoveFavorite(this.props.cardArr[this.state.page].id, 'remove')
+                  }
+                />
               }
               content="Remove card from favorites."
             />
@@ -323,7 +340,9 @@ class CardDetail extends Component {
                 <Icon
                   name="star empty"
                   className="icon-favorite"
-                  onClick={() => this.setFavorite()}
+                  onClick={() =>
+                    this.addRemoveFavorite(this.props.cardArr[this.state.page].id, 'add')
+                  }
                 />
               }
               content="Add card to favorites."

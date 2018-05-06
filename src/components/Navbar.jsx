@@ -44,7 +44,6 @@ class NavBar extends Component {
   render() {
     // Use this to show either login or user profile links on navbar.
     const { isAuthenticated } = this.props.auth;
-
     return (
       <Menu inverted style={{ margin: 0, borderRadius: 0 }}>
         <Menu.Item header style={{ width: '235px' }}>

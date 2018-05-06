@@ -25,8 +25,7 @@ class CardLookup extends Component {
   }
 
   handleOpenModal = (selectedCard) => {
-    this.setState({ selectedCard });
-    this.setState({ showModal: true });
+    this.setState({ selectedCard, showModal: true });
   };
 
   handleCloseModal = () => {
@@ -56,6 +55,7 @@ class CardLookup extends Component {
               <CardDetail
                 cardArr={this.state.selectedCard}
                 accessToken={this.state.tcgAccessToken}
+                auth={this.props.auth}
               />
             </Modal.Content>
           </Modal>

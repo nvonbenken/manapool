@@ -2,9 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Input, Dropdown, Menu } from 'semantic-ui-react';
 import mtg from 'mtgsdk';
-
 import logo from '../images/logo.svg';
-
 import '../styles/filters.css';
 
 class Filters extends Component {
@@ -93,30 +91,11 @@ class Filters extends Component {
     const pixelsFromWindowBottomToBottom = 0 + docHeight - window.scrollY - window.innerHeight;
 
     if (pixelsFromWindowBottomToBottom < 200) {
-      this.setState({ page: this.state.page + 1 });
       this.setState({
+        page: this.state.page + 1,
         cards: new Map(this.state.cards, this.getCards()),
       });
     }
-  };
-
-  cardSearch = () => {
-    fetch(`https://api.magicthegathering.io/v1/cards?contains=imageUrl&pageSize=28&page=${
-      this.state.page
-    }&name=${this.state.term}&colors=${this.state.colors.join('|')}&types=${this.state.types.join('|')}&rarity=${this.state.rarity.join('|')}&cmc=${
-      this.state.cmc
-    }&gameFormat=${this.state.legality.join('|')}`)
-      .then(response => response.json())
-      .then((responseJson) => {
-        const m = new Map();
-        responseJson.cards.forEach((e) => {
-          m.set(e.name, e);
-        });
-        this.setState({
-          cards: new Map(this.state.cards, m),
-        });
-        this.props.onSearchComplete(m);
-      });
   };
 
   render() {
@@ -161,11 +140,14 @@ class Filters extends Component {
     ];
 
     return (
-      <Menu as={Menu} borderless visible vertical inverted className="filters">
+      <Menu as={Menu} borderless visible="true" vertical inverted className="filters">
         <div
           style={{
- display: 'flex', fontWeight: 700, alignItems: 'center', paddingBottom: '15px',
-}}
+            display: 'flex',
+            fontWeight: 700,
+            alignItems: 'center',
+            paddingBottom: '15px',
+          }}
         >
           <img className="ui image" src={logo} alt="" style={{ height: '20px', margin: '5px' }} />
           ManaPool

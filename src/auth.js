@@ -18,9 +18,9 @@ export default class Auth {
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000/callback'
         : 'https://manapool.org/callback',
-    audience: 'https://manapool.auth0.com/userinfo',
+    audience: 'https://manapool.auth0.com/api/v2/',
     responseType: 'token id_token',
-    scope: 'openid profile email app_metadata user_metadata',
+    scope: 'openid profile email update:current_user_metadata',
   });
 
   userProfile;
@@ -49,6 +49,7 @@ export default class Auth {
   };
 
   setSession = (authResult) => {
+    console.log(authResult);
     const expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
@@ -73,10 +74,7 @@ export default class Auth {
     const accessToken = this.getAccessToken();
     this.auth0.client.userInfo(accessToken, (err, profile) => {
       if (profile) {
-        profile.user_metadata = profile.user_metadata || {};
-        profile.user_metadata.displayName = profile.user_metadata.displayName || profile.nickname;
-        profile.user_metadata.favorites = profile.user_metadata.favorites || {};
-        profile.user_metadata.savedDecks = profile.user_metadata.savedDecks || {};
+        console.log(profile);
         this.userProfile = profile;
       }
       cb(err, profile);
