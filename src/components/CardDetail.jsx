@@ -32,7 +32,9 @@ class CardDetail extends Component {
   };
 
   checkFavorite = cardId =>
-    this.props.auth.userProfile.user_metadata.favorite_cards.includes(cardId);
+    (this.props.auth.userProfile
+      ? this.props.auth.userProfile.user_metadata.favorite_cards.includes(cardId)
+      : false);
 
   handleClick = (event, type) => {
     this.setState({ loading: true, cost: null });
@@ -338,7 +340,7 @@ class CardDetail extends Component {
             <Popup
               trigger={
                 <Icon
-                  name="star empty"
+                  name="star outline"
                   className="icon-favorite"
                   onClick={() =>
                     this.addRemoveFavorite(this.props.cardArr[this.state.page].id, 'add')
